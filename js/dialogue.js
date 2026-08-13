@@ -138,8 +138,11 @@
     el.list.lastChild.scrollIntoView({ block: 'nearest' });
   }
 
+  /* 아직 못 들은 소문을 쥐고 있는 사람인가 — 머리 위 «!» 표시에 씁니다 */
+  const hasNews = npc => !!npc.rumors && npc.rumors.some(id => RUMORS[id] && !has(id));
+
   NS.Dialogue = {
-    RUMORS, learned, init, open, advance, close, talkTo, lookAt, learn,
+    RUMORS, learned, init, open, advance, close, talkTo, lookAt, learn, hasNews,
     isOpen: () => state.open,
     count: () => learned.length,
     total: TOTAL

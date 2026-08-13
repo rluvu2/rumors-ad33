@@ -73,6 +73,7 @@
     b.addEventListener('pointercancel', () => release(code));
   }
   cv.addEventListener('pointerdown', () => { cv.focus(); Snd.unlock(); });
+  rd('btnPause').addEventListener('click', () => pause());   // 터치 기기에는 Esc 가 없다
 
   /* ══════════════════════════════════════════
      2. 눈앞의 것 집어내기
@@ -206,6 +207,11 @@
         rd(id).checked = o.spec; show[key] = o.spec;
       }
     }
+    // 주인공 그림 — 정면·측면·후면을 받아 둔 다음에 갈아 끼운다
+    if (o.hero && o.hero !== applied.hero && A.CHARS[o.hero]) {
+      applied.hero = o.hero;
+      A.load([o.hero]).then(() => { player.char = o.hero; });
+    }
   }
 
   /* ══════════════════════════════════════════
@@ -247,23 +253,100 @@
   /* ══════════════════════════════════════════
      6. 그리기
      ══════════════════════════════════════════ */
-  function drawBubble(sx, sy, w, t) {
-    const x = Math.round(sx + w / 2 - 7), y = Math.round(sy - 13 + Math.sin(t * 4) * 1.5);
+  /* ══════════════════════════════════════════
+     6-b. 머리 위 표시 — 이름표 · 말 걸 수 있음 · 새 소문
+     ══════════════════════════════════════════ */
+  const TAG_NEAR = 90, TAG_FAR = 165;        // 이 사이에서 이름표가 스며들듯 나타난다
+
+  /* 분류마다 이름 색을 달리해 누가 누구인지 한눈에 */
+  const TAG_COLOR = {
+    '로마·통제': '#E0836F', '종교 계층': '#E3C273', '상류층': '#C6A6D8',
+    '상업·시장': '#8ECDAE', '순례자': '#A8C4DE', '서민·노동': '#E4E7E1',
+    '성경 인물': '#F2E6C4'
+  };
+  const tagColor = e => (e.char && TAG_COLOR[A.CHARS[e.char].cat]) || (e.sprite ? '#A9B1A4' : '#E4E7E1');
+
+  /* 그림 꼭대기 — 이름표를 얹을 높이 */
+  function headTop(e) {
+    if (e.isPlayer && heroImg) return e.y + e.h - e.drawH + 2;
+    if (e.char) return e.y + e.h - A.CHARS[e.char].h + 2;
+    if (e.sprite) return e.y + e.h - A.ATLAS[e.sprite].h + 2;
+    return e.y + e.h - 27;
+  }
+
+  const distTo = e => Math.hypot(e.x + e.w / 2 - (player.x + player.w / 2),
+                                 e.y + e.h / 2 - (player.y + player.h / 2));
+
+  /* 멀면 옅고 가까우면 진하게. 옵션에서 «늘 보여 주기» 를 켜면 항상 1 */
+  function tagAlpha(e) {
+    if (e.isPlayer) return playerTagAlpha();
+    if (show.name) return 1;
+    const d = distTo(e);
+    if (d <= TAG_NEAR) return 1;
+    if (d >= TAG_FAR) return 0;
+    return (TAG_FAR - d) / (TAG_FAR - TAG_NEAR);
+  }
+
+  /* 내 이름표는 옆에 사람이 붙으면 비켜 준다 — 두 이름표가 포개지면 둘 다 못 읽는다 */
+  function playerTagAlpha() {
+    if (Dlg.isOpen()) return 0;
+    let near = Infinity;
+    for (const n of world().npcs) near = Math.min(near, distTo(n));
+    if (near < 44) return 0;
+    if (near < 74) return (near - 44) / 30 * 0.75;
+    return 0.75;
+  }
+
+  function nameplate(text, cx, by, color, focused) {
+    ctx.font = '600 9px "IBM Plex Sans KR", sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const w = Math.ceil(ctx.measureText(text).width) + 9;
+    const x = Math.round(cx - w / 2), y = Math.round(by - 12);
+    ctx.fillStyle = 'rgba(10,14,11,.82)';
+    ctx.fillRect(x, y, w, 12);
+    if (focused) {                                  // 지금 말 걸 수 있는 사람
+      ctx.strokeStyle = '#E3C273'; ctx.lineWidth = 1;
+      ctx.strokeRect(x + .5, y + .5, w - 1, 11);
+    }
+    ctx.fillStyle = color;
+    ctx.fillText(text, Math.round(cx), y + 6.5);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  }
+
+  /* 말풍선 — 지금 SPACE 로 말 걸 수 있는 사람 위에 */
+  function drawBubble(cx, by, t) {
+    const x = Math.round(cx - 7), y = Math.round(by - 12 + Math.sin(t * 4) * 1.5);
     ctx.fillStyle = 'rgba(18,22,19,.86)';
     ctx.fillRect(x, y, 14, 10); ctx.fillRect(x + 5, y + 10, 4, 2);
     ctx.fillStyle = '#8ECDAE';
     ctx.fillRect(x + 3, y + 4, 2, 2); ctx.fillRect(x + 6, y + 4, 2, 2); ctx.fillRect(x + 9, y + 4, 2, 2);
   }
 
-  function label(text, cx, by, color) {
-    ctx.font = '600 10px "IBM Plex Sans KR", sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const w = ctx.measureText(text).width + 10;
-    ctx.fillStyle = 'rgba(16,20,17,.82)';
-    ctx.fillRect(Math.round(cx - w / 2), Math.round(by - 10), Math.round(w), 13);
-    ctx.fillStyle = color;
-    ctx.fillText(text, Math.round(cx), Math.round(by - 3));
-    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  /* 아직 못 들은 소문을 쥔 사람 위에 뜨는 «!» */
+  function drawNews(cx, by, t) {
+    const x = Math.round(cx - 2), y = Math.round(by - 12 + Math.sin(t * 3.4) * 1.6);
+    ctx.fillStyle = 'rgba(10,14,11,.72)';
+    ctx.fillRect(x - 2, y - 1, 8, 12);
+    ctx.fillStyle = '#F2C86B';
+    ctx.fillRect(x, y, 4, 6);        // 몸통
+    ctx.fillRect(x, y + 8, 4, 3);    // 점
+  }
+
+  /* 사람 하나의 머리 위를 통째로 그린다 */
+  function drawTags(e, ox, oy, focused, t) {
+    const a = tagAlpha(e);
+    if (a <= 0.02) return;
+    const cx = e.x - ox + e.w / 2;
+    let by = headTop(e) - oy - 3;
+
+    ctx.globalAlpha = a;
+    nameplate(e.isPlayer ? (A.CHARS[e.char] ? A.CHARS[e.char].name : e.name) : e.name,
+              cx, by, tagColor(e), focused);
+    by -= 13;
+
+    if (focused) drawBubble(cx, by, t);
+    else if (!e.isPlayer && Dlg.hasNews(e)) drawNews(cx, by, t);
+    ctx.globalAlpha = 1;
   }
 
   function render(t) {
@@ -297,12 +380,8 @@
     const opt = { heroImg, sheetMode };
     for (const d of draws) {
       if (d.obj) A.draw(ctx, d.obj.a, d.dx, d.dy);
-      else {
-        Actors.draw(ctx, d.ent, d.ent.x - ox, d.ent.y - oy, opt);
-        if (d.ent === near) drawBubble(d.ent.x - ox, d.ent.y - oy, d.ent.w, t);
-      }
+      else Actors.draw(ctx, d.ent, d.ent.x - ox, d.ent.y - oy, opt);
     }
-
     if (w.def.dark) {                                  // 좁은 골목·실내의 어둠
       const px = player.x + player.w / 2 - ox, py = player.y + player.h / 2 - oy;
       const g = ctx.createRadialGradient(px, py, 20, px, py, 160);
@@ -311,9 +390,10 @@
       ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH);
     }
 
-    drawSpecOverlay(w, ox, oy);
+    // 머리 위 표시는 사람들을 다 그린 뒤, 어둠보다도 위에 얹는다
+    for (const d of draws) if (d.ent) drawTags(d.ent, ox, oy, d.ent === near, t);
 
-    if (show.name) for (const n of w.npcs) label(n.name, n.x - ox + n.w / 2, n.y - oy - 6, '#8ECDAE');
+    drawSpecOverlay(w, ox, oy);
 
     if (cardT > 0) {                                   // 장소 이름표
       ctx.globalAlpha = Math.min(1, cardT * 2.2);

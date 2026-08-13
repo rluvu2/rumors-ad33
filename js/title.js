@@ -15,7 +15,8 @@
   const NS = window.JR;
   const KEY = 'jr.options';
 
-  const DEFAULTS = { bgm: 45, sfx: 50, mute: false, names: false, spec: false, video: true };
+  const DEFAULTS = { bgm: 45, sfx: 50, mute: false, names: false, spec: false, video: true,
+                     hero: 'g31_traveler' };
   const opt = Object.assign({}, DEFAULTS, read());
 
   let hooks = {};                 // { onStart, onResume, apply }
@@ -45,9 +46,11 @@
       root: rd('title'), vid: rd('titleVid'), tag: rd('titleTag'), hint: rd('titleHint'),
       start: rd('btnStart'), load: rd('titleLoad'), bar: rd('titleBar'),
       sound: rd('btnVidSound'),
-      pages: { main: rd('pageMain'), option: rd('pageOption'),
-               help: rd('pageHelp'), credit: rd('pageCredit') }
+      pages: { main: rd('pageMain'), char: rd('pageChar'), option: rd('pageOption'),
+               help: rd('pageHelp'), credit: rd('pageCredit') },
+      grid: rd('charGrid'), now: rd('charNow')
     };
+    buildChars();
 
     /* 차림표 — 누르거나, 방향키로 고르고 Enter */
     items.push(...document.querySelectorAll('#titleMenu .menu__item'));
@@ -105,7 +108,7 @@
     bindCheck('optVideo', 'video');
     rd('btnReset').addEventListener('click', () => {
       Object.assign(opt, DEFAULTS);
-      save(); paintOptions(); apply();
+      save(); paintOptions(); paintHero(); apply();
     });
 
     paintOptions(); paintSound(); apply();
@@ -121,6 +124,44 @@
   }
   function bindCheck(id, key) {
     rd(id).addEventListener('change', e => { opt[key] = e.target.checked; save(); apply(); });
+  }
+
+  /* ══════════════════════════════════════════
+     주인공 고르기 — assets 의 인물 표를 그대로 늘어놓는다
+     ══════════════════════════════════════════ */
+  function buildChars() {
+    const A = NS.Assets;
+    if (!el.grid || !A) return;
+    if (!A.CHARS[opt.hero]) opt.hero = DEFAULTS.hero;      // 없는 키가 저장돼 있으면 되돌린다
+    for (const key in A.CHARS) {
+      const b = document.createElement('button');
+      b.className = 'pick__b'; b.dataset.key = key;
+      b.title = A.CHARS[key].name;
+      const img = document.createElement('img');
+      img.src = A.pathOf(key); img.alt = A.CHARS[key].name; img.loading = 'lazy';
+      b.appendChild(img);
+      b.addEventListener('click', () => pickHero(key));
+      el.grid.appendChild(b);
+    }
+    paintHero();
+  }
+
+  function pickHero(key) {
+    opt.hero = key;
+    save(); paintHero(); apply();
+  }
+
+  function paintHero() {
+    const A = NS.Assets;
+    if (!el.grid || !A) return;
+    for (const b of el.grid.children) b.classList.toggle('is-on', b.dataset.key === opt.hero);
+    const m = A.CHARS[opt.hero];
+    el.now.textContent = m ? m.name : '—';
+    if (m) {
+      const s = document.createElement('small');
+      s.textContent = m.cat;
+      el.now.appendChild(s);
+    }
   }
 
   function paintOptions() {
