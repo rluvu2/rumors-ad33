@@ -1,0 +1,374 @@
+{
+  "tile_size": 32,
+  "objects": [
+    {
+      "key": "x01_city_gate",
+      "name_ko": "성문(아치 이중 문루)",
+      "sprite_tiles": [
+        4,
+        5
+      ],
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "sprite_px": [
+        128,
+        160
+      ],
+      "note": "성벽 키트와 이어 붙임. 문 앞 2칸이 통과 지점"
+    },
+    {
+      "key": "x02_alley_arch",
+      "name_ko": "골목 위 아치 통로",
+      "sprite_tiles": [
+        3,
+        3
+      ],
+      "footprint_tiles": [
+        0,
+        0
+      ],
+      "sprite_px": [
+        96,
+        96
+      ],
+      "note": "좌우 1칸씩만 충돌, 가운데는 통행 가능"
+    },
+    {
+      "key": "x03_market_stall",
+      "name_ko": "시장 노점 천막",
+      "sprite_tiles": [
+        3,
+        2
+      ],
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "sprite_px": [
+        96,
+        64
+      ],
+      "note": "차양 아래 앞줄에서 상인과 대화"
+    },
+    {
+      "key": "x04_fruit_table",
+      "name_ko": "과일·채소 좌판",
+      "sprite_tiles": [
+        2,
+        1
+      ],
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "sprite_px": [
+        64,
+        32
+      ],
+      "note": "노점 앞에 붙여 배치"
+    },
+    {
+      "key": "x05_basket_pile",
+      "name_ko": "바구니 더미",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "골목 구석 채움용"
+    },
+    {
+      "key": "x06_water_jar",
+      "name_ko": "물 항아리",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "우물가·집 앞에 배치"
+    },
+    {
+      "key": "x07_campfire",
+      "name_ko": "화톳불",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "야간 씬 광원. 병사 야영·순례객 모닥불"
+    },
+    {
+      "key": "x08_oil_lamp_stand",
+      "name_ko": "등잔대",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "실내·회당 조명"
+    },
+    {
+      "key": "x09_laundry_line",
+      "name_ko": "빨랫줄",
+      "sprite_tiles": [
+        2,
+        1
+      ],
+      "footprint_tiles": [
+        0,
+        0
+      ],
+      "sprite_px": [
+        64,
+        32
+      ],
+      "note": "옥상·골목 상단에 걸침, 충돌 없음"
+    },
+    {
+      "key": "x10_money_table",
+      "name_ko": "환전상 탁자",
+      "sprite_tiles": [
+        2,
+        1
+      ],
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "sprite_px": [
+        64,
+        32
+      ],
+      "note": "성전 뜰 바깥에 배치"
+    },
+    {
+      "key": "x11_dove_cage",
+      "name_ko": "비둘기 새장",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "제물용 비둘기 판매대"
+    },
+    {
+      "key": "x12_cart",
+      "name_ko": "짐수레",
+      "sprite_tiles": [
+        2,
+        1
+      ],
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "sprite_px": [
+        64,
+        32
+      ],
+      "note": "시장 진입로·성문 앞"
+    },
+    {
+      "key": "x13_grain_sacks",
+      "name_ko": "곡물 자루 더미",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "창고·시장 소품"
+    },
+    {
+      "key": "x14_scroll_shelf",
+      "name_ko": "두루마리 선반",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "회당 실내"
+    },
+    {
+      "key": "x15_donkey",
+      "name_ko": "당나귀",
+      "sprite_tiles": [
+        2,
+        2
+      ],
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "sprite_px": [
+        64,
+        64
+      ],
+      "note": "짐 나르는 가축. 골목·성문 앞"
+    },
+    {
+      "key": "x16_sheep",
+      "name_ko": "양",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "제물·목축. 무리로 배치"
+    },
+    {
+      "key": "x17_goat",
+      "name_ko": "염소",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "note": "제물·목축. 양과 섞어 배치"
+    }
+  ],
+  "tiles": [
+    {
+      "key": "cw_cap_mid",
+      "kit": "city_wall",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "cw_cap_left",
+      "kit": "city_wall",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "cw_cap_right",
+      "kit": "city_wall",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "cw_wall_mid",
+      "kit": "city_wall",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "cw_wall_left",
+      "kit": "city_wall",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "cw_wall_right",
+      "kit": "city_wall",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "cw_base_mid",
+      "kit": "city_wall",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "tr_cap_mid",
+      "kit": "terrace",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "tr_face_mid",
+      "kit": "terrace",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "tr_face_left",
+      "kit": "terrace",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "tr_face_right",
+      "kit": "terrace",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "tr_stair_mid",
+      "kit": "terrace",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "tr_stair_cap",
+      "kit": "terrace",
+      "w": 32,
+      "h": 32
+    }
+  ]
+}

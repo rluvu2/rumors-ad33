@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>루머스 AD 33 · 타일 프로토타입</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="rig">
+
+  <div class="plate">
+    <div class="plate__name">루머스 AD 33</div>
+    <div class="plate__ver">v0.5 / 예루살렘 · 시작 화면</div>
+    <div class="plate__led"><span class="plate__dot"></span>RUNNING</div>
+  </div>
+
+  <div class="body">
+    <div class="well">
+      <canvas id="screen" width="512" height="352" tabindex="0" aria-label="게임 화면"></canvas>
+
+      <div class="talk" id="talk">
+        <div class="talk__who" id="talkWho">이름</div>
+        <p class="talk__text" id="talkText">내용</p>
+        <div class="talk__more" id="talkMore">SPACE 계속</div>
+      </div>
+
+      <div class="pad" aria-hidden="true">
+        <span></span><button class="pad__b" data-pad="KeyW">↑</button><span></span>
+        <button class="pad__b" data-pad="KeyA">←</button><span></span><button class="pad__b" data-pad="KeyD">→</button>
+        <span></span><button class="pad__b" data-pad="KeyS">↓</button><span></span>
+      </div>
+      <button class="pad__a" data-pad="Space" aria-hidden="true">살펴보기</button>
+
+      <!-- ── 시작 화면 (assets/videos/start.mp4 을 배경으로) ── -->
+      <div class="title" id="title">
+        <video class="title__bg" id="titleVid" src="assets/videos/start.mp4"
+               autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+        <div class="title__veil"></div>
+
+        <button class="title__sound" id="btnVidSound" title="영상 소리 켜기" aria-label="영상 소리 켜기">🔇</button>
+
+        <!-- 첫 화면 — 제목은 영상에 새겨져 있으므로 차림표만 아래에 얹는다 -->
+        <div class="title__page title__page--main is-on" id="pageMain">
+          <!-- 영상을 못 틀 때만 나오는 글자 제목 -->
+          <div class="title__fallback">
+            <div class="title__mark">RUMORS</div>
+            <h1 class="title__name">루머스 <span>AD 33</span></h1>
+          </div>
+
+          <p class="title__tag" id="titleTag">유월절 엿새 전, 성 안에는 소문이 돈다.</p>
+          <nav class="menu" id="titleMenu">
+            <button class="menu__item menu__item--big is-sel" id="btnStart" data-act="start" disabled>NOW LOADING</button>
+            <button class="menu__item" id="btnOption" data-act="option">OPTIONS</button>
+            <button class="menu__item" id="btnHelp" data-act="help">CONTROLS</button>
+            <button class="menu__item" id="btnCredit" data-act="credit">CREDITS</button>
+          </nav>
+          <div class="title__hint" id="titleHint">PRESS START</div>
+          <div class="title__load" id="titleLoad"><i id="titleBar"></i></div>
+        </div>
+
+        <!-- 옵션 -->
+        <div class="title__page" id="pageOption">
+          <h2 class="title__head">OPTIONS<small>옵션</small></h2>
+          <div class="opt">
+            <label class="opt__row">
+              <span>배경음</span>
+              <input type="range" id="optBgm" min="0" max="100" step="5">
+              <b id="optBgmV">45</b>
+            </label>
+            <label class="opt__row">
+              <span>효과음</span>
+              <input type="range" id="optSfx" min="0" max="100" step="5">
+              <b id="optSfxV">50</b>
+            </label>
+            <label class="opt__check"><input type="checkbox" id="optNames"> 인물 이름표를 늘 보여 주기</label>
+            <label class="opt__check"><input type="checkbox" id="optSpec"> 규격 표시 (개발용, 네 가지 한 번에)</label>
+            <label class="opt__check"><input type="checkbox" id="optVideo"> 시작 화면 영상 재생</label>
+            <p class="opt__note">배경음은 장소마다 다른 곡입니다. 효과음 파일(<code>sfx_*.wav</code>)은 아직 없어서 조용합니다.
+            브라우저 정책상 화면을 한 번 눌러야 소리가 시작됩니다.</p>
+          </div>
+          <nav class="menu menu--row">
+            <button class="menu__item" data-back="1">BACK</button>
+            <button class="menu__item" id="btnReset">RESET</button>
+          </nav>
+        </div>
+
+        <!-- 조작법 -->
+        <div class="title__page" id="pageHelp">
+          <h2 class="title__head">CONTROLS<small>조작법</small></h2>
+          <dl class="help">
+            <dt>W A S D</dt><dd>걷기 (방향키도 됩니다)</dd>
+            <dt>Shift</dt><dd>달리기</dd>
+            <dt>Space</dt><dd>말 걸기 · 살펴보기 · 문으로 들어가기 (E · Enter 도 됩니다)</dd>
+            <dt>G</dt><dd>규격 표시 켜고 끄기</dd>
+            <dt>Esc</dt><dd>잠시 멈추고 이 화면으로</dd>
+          </dl>
+          <p class="help__more">사람에게 말을 걸면 아직 못 들은 <b>소문</b>이 한 자락씩 붙습니다.
+          들은 소문은 오른쪽 수첩에 쌓이고, 성 안 사람들이 그 이야기를 옮기기 시작합니다.
+          터치 기기에서는 화면 아래 왼쪽 십자키와 오른쪽 «살펴보기» 단추를 씁니다.</p>
+          <nav class="menu menu--row"><button class="menu__item" data-back="1">BACK</button></nav>
+        </div>
+
+        <!-- 제작 -->
+        <div class="title__page" id="pageCredit">
+          <h2 class="title__head">CREDITS<small>제작</small></h2>
+          <dl class="help">
+            <dt>ART</dt><dd>건물 · 바닥 · 인물 · 소품 — <code>assets/images/</code></dd>
+            <dt>VIDEO</dt><dd>시작 화면 — <code>assets/videos/start.mp4</code></dd>
+            <dt>MUSIC</dt><dd>시작 화면과 여섯 장소의 곡 — <code>assets/audio/bgm_*.mp3</code></dd>
+            <dt>FONT</dt><dd>IBM Plex Sans KR · IBM Plex Mono · Press Start 2P</dd>
+            <dt>STAGE</dt><dd>예루살렘, AD 33년 유월절 무렵</dd>
+          </dl>
+          <p class="help__more">이름과 감사의 말은 <code>index.html</code> 의 <code>#pageCredit</code> 에서 고쳐 적으면 됩니다.</p>
+          <nav class="menu menu--row"><button class="menu__item" data-back="1">BACK</button></nav>
+        </div>
+      </div>
+    </div>
+
+    <div class="rail">
+      <div class="mod">
+        <div class="mod__title">조작</div>
+        <div class="keys">
+          <div class="keys__row"><span class="key" data-key="KeyW">W</span></div>
+          <div class="keys__row">
+            <span class="key" data-key="KeyA">A</span>
+            <span class="key" data-key="KeyS">S</span>
+            <span class="key" data-key="KeyD">D</span>
+          </div>
+        </div>
+        <ul class="legend">
+          <li><span class="key" data-key="ShiftLeft">Shift</span> 달리기</li>
+          <li><span class="key" data-key="Space">Space</span> 말 걸기 · 들어가기</li>
+          <li><span class="key" data-key="KeyG">G</span> 규격 보기</li>
+        </ul>
+      </div>
+
+      <div class="mod">
+        <div class="mod__title">판독</div>
+        <div class="readout">
+          <div class="readout__row"><span>장소</span><b id="rdMap">—</b></div>
+          <div class="readout__row"><span>타일</span><b id="rdTile">0, 0</b></div>
+          <div class="readout__row"><span>바닥</span><b id="rdFloor">—</b></div>
+          <div class="readout__row"><span>프레임</span><b id="rdFps">60</b></div>
+        </div>
+        <div class="look">
+          <div class="look__name" id="lookName">바라보는 대상 없음</div>
+          <div class="look__spec" id="lookSpec"></div>
+        </div>
+      </div>
+
+      <div class="mod">
+        <div class="mod__title">장소</div>
+        <div class="jump" id="jump"></div>
+      </div>
+
+      <div class="mod">
+        <div class="mod__title">소문 수첩 <b id="rumorCount">0/0</b></div>
+        <ul class="notes" id="rumorList"><li class="notes__none">아직 들은 소문이 없습니다.</li></ul>
+      </div>
+
+      <div class="mod">
+        <div class="mod__title">규격 표시</div>
+        <label class="check"><input type="checkbox" id="ckFoot"><span class="swatch" style="background:#5fc06a"></span> 충돌 발판</label>
+        <label class="check"><input type="checkbox" id="ckDoor"><span class="swatch" style="background:#e89a3c"></span> 출입·상호작용 칸</label>
+        <label class="check"><input type="checkbox" id="ckSprite"><span class="swatch" style="background:#63a8e8"></span> 스프라이트 범위</label>
+        <label class="check"><input type="checkbox" id="ckBase"><span class="swatch" style="background:#e05c5c"></span> y-sort 기준선</label>
+        <label class="check"><input type="checkbox" id="ckName"><span class="swatch" style="background:#8ECDAE"></span> 인물 이름표</label>
+        <button class="btn btn--full" id="btnHero">주인공 그림 넣기</button>
+        <label class="check" style="margin-top:6px"><input type="checkbox" id="ckSheet"> 4×4 스프라이트시트</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p>규격서 그대로 돌아갑니다. 오브젝트는 <b>스프라이트 칸</b>과 <b>충돌 발판</b>이 따로 있고, 그 차이가 오버행이라 위쪽 줄로 걸어가면 건물 뒤로 가려집니다.
+    앞뒤 순서는 규격서의 빨간 기준선(스프라이트 하단 = 발판 앞줄 하단)으로 정렬합니다.</p>
+    <p>그림은 <code>assets/images/</code> 의 낱장 PNG를 그대로 불러옵니다 — 불러온 그림 <b id="cntAsset">0</b>장.
+    인물은 보는 방향에 따라 정면·측면·후면 세 장을 바꿔 씁니다(측면은 오른쪽 기준, 왼쪽은 뒤집어 재사용).
+    <code>ATLAS</code>(칸 규격)는 <code>js/assets.js</code>, <code>MAPS</code>(배치)는 <code>js/map.js</code> 에 있고,
+    새 오브젝트를 놓으려면 <code>objs</code> 에 <code>{a, c, r}</code> 한 줄만 더하면 됩니다.</p>
+  </div>
+
+</div>
+
+<script src="js/assets.js"></script>
+<script src="js/map.js"></script>
+<script src="js/player.js"></script>
+<script src="js/dialogue.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/title.js"></script>
+<script src="main.js"></script>
+
+<script>addEventListener('load',()=>{setTimeout(()=>{
+  const de=document.documentElement;
+  const wide=[...document.querySelectorAll('*')].filter(e=>e.getBoundingClientRect().right>innerWidth+1)
+    .map(e=>e.tagName+(e.id?'#'+e.id:'')+(e.className&&e.className.split?'.'+String(e.className).split(' ')[0]:'')+'@'+Math.round(e.getBoundingClientRect().right));
+  document.title='MEASURE view='+innerWidth+' scroll='+de.scrollWidth+' 넘침='+wide.slice(0,8).join(' , ');
+},900);});</script></body>
+</html>

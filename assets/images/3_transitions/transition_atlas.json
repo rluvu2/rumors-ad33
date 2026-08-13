@@ -1,0 +1,470 @@
+{
+  "tile_size": 32,
+  "seamless": true,
+  "frames": [
+    {
+      "key": "t1_dirt_to_cobble__b_n",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_n",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_s",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_s",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_w",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_w",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_e",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_e",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_corner_nw",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_corner_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_corner_ne",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_corner_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_corner_sw",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_corner_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_corner_se",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_corner_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_notch_se",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_notch_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_notch_sw",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_notch_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_notch_ne",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_notch_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t1_dirt_to_cobble__b_notch_nw",
+      "set": "t1_dirt_to_cobble",
+      "set_name_ko": "흙바닥 → 돌포장",
+      "mask": "b_notch_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_n",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_n",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_s",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_s",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_w",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_w",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_e",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_e",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_corner_nw",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_corner_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_corner_ne",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_corner_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_corner_sw",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_corner_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_corner_se",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_corner_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_notch_se",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_notch_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_notch_sw",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_notch_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_notch_ne",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_notch_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t2_dirt_to_grass__b_notch_nw",
+      "set": "t2_dirt_to_grass",
+      "set_name_ko": "흙바닥 → 마른 풀",
+      "mask": "b_notch_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_n",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_n",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_s",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_s",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_w",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_w",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_e",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_e",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_corner_nw",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_corner_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_corner_ne",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_corner_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_corner_sw",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_corner_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_corner_se",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_corner_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_notch_se",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_notch_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_notch_sw",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_notch_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_notch_ne",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_notch_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t3_court_to_slab__b_notch_nw",
+      "set": "t3_court_to_slab",
+      "set_name_ko": "석회 흙 → 성전 석판",
+      "mask": "b_notch_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_n",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_n",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_s",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_s",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_w",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_w",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_e",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_e",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_corner_nw",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_corner_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_corner_ne",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_corner_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_corner_sw",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_corner_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_corner_se",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_corner_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_notch_se",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_notch_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_notch_sw",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_notch_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_notch_ne",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_notch_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "t4_water_to_stone__b_notch_nw",
+      "set": "t4_water_to_stone",
+      "set_name_ko": "물 → 석재 물가",
+      "mask": "b_notch_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_n",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_n",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_s",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_s",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_w",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_w",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_e",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_e",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_nw",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_ne",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_ne",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_sw",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_sw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_se",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_se",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_corner_nw",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_corner_nw",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "s_shadow_corner_ne",
+      "set": "s_wall_shadow",
+      "set_name_ko": "벽 밑 그늘(알파 오버레이)",
+      "mask": "s_shadow_corner_ne",
+      "w": 32,
+      "h": 32
+    }
+  ]
+}

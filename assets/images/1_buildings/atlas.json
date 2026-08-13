@@ -1,0 +1,105 @@
+{
+  "tile_size": 32,
+  "sheet": "spritesheet.png",
+  "frames": [
+    {
+      "key": "01_basic_mudbrick_house",
+      "name_ko": "기본 흙벽돌집",
+      "grid": "2x3",
+      "x": 8,
+      "y": 40,
+      "w": 64,
+      "h": 96
+    },
+    {
+      "key": "02_tenement_block",
+      "name_ko": "확장형 다세대 주택",
+      "grid": "4x4",
+      "x": 80,
+      "y": 8,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "key": "03_awning_house",
+      "name_ko": "낡은 차양을 덧댄 집",
+      "grid": "2x3",
+      "x": 216,
+      "y": 40,
+      "w": 64,
+      "h": 96
+    },
+    {
+      "key": "04_bakery_with_oven",
+      "name_ko": "화덕이 있는 빵집",
+      "grid": "2x3",
+      "x": 288,
+      "y": 40,
+      "w": 64,
+      "h": 96
+    },
+    {
+      "key": "05_open_workshop",
+      "name_ko": "반개방형 공방",
+      "grid": "3x3",
+      "x": 360,
+      "y": 40,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "key": "06_arched_warehouse",
+      "name_ko": "아치형 창고 건물",
+      "grid": "2x3",
+      "x": 464,
+      "y": 40,
+      "w": 64,
+      "h": 96
+    },
+    {
+      "key": "07_noble_marble_mansion",
+      "name_ko": "고위층 대리석 저택",
+      "grid": "4x4",
+      "x": 536,
+      "y": 8,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "key": "08_roman_barracks",
+      "name_ko": "로마 주둔군 병영",
+      "grid": "4x3",
+      "x": 672,
+      "y": 40,
+      "w": 128,
+      "h": 96
+    },
+    {
+      "key": "09_watchtower",
+      "name_ko": "수직 망루와 감시탑",
+      "grid": "2x4",
+      "x": 808,
+      "y": 8,
+      "w": 64,
+      "h": 128
+    },
+    {
+      "key": "10_synagogue",
+      "name_ko": "동네 지역 회당",
+      "grid": "3x4",
+      "x": 880,
+      "y": 8,
+      "w": 96,
+      "h": 128
+    },
+    {
+      "key": "11_temple_colonnade",
+      "name_ko": "성전 뜰의 대리석 회랑",
+      "grid": "4x3",
+      "x": 984,
+      "y": 40,
+      "w": 128,
+      "h": 96
+    }
+  ]
+}

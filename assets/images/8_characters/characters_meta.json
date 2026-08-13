@@ -1,0 +1,1295 @@
+{
+  "tile_size": 32,
+  "sprite_note": "모든 캐릭터는 1x1.5칸(32x48px) 스프라이트, 1x1칸 발판, 하단 중앙 정렬",
+  "facing_note": "캐릭터마다 정면(key.png)·측면(key_side.png)·후면(key_back.png) 세 장이 있습니다. 측면은 오른쪽을 바라보는 기준이며, 왼쪽으로 이동할 때는 엔진에서 수평 반전(flip)해 재사용하세요. 위/뒤로 이동할 때는 back, 좌우 이동할 때는 side를 씁니다.",
+  "characters": [
+    {
+      "key": "g01_laborer",
+      "name_ko": "남성 일용직 노동자",
+      "category": "서민·노동",
+      "note": "시장·건축 현장 등 어디에나 배치하는 기본 군중",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g01_laborer.png (정면)",
+        "g01_laborer_side.png (측면, 오른쪽 기준)",
+        "g01_laborer_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g02_housewife",
+      "name_ko": "여성 가정주부",
+      "category": "서민·노동",
+      "note": "우물가·골목에서 물동이를 나르는 일상 인물",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g02_housewife.png (정면)",
+        "g02_housewife_side.png (측면, 오른쪽 기준)",
+        "g02_housewife_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g03_fisherman",
+      "name_ko": "어부",
+      "category": "서민·노동",
+      "note": "갈릴리 출신 서민. 그물을 손질하는 자세",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g03_fisherman.png (정면)",
+        "g03_fisherman_side.png (측면, 오른쪽 기준)",
+        "g03_fisherman_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g04_shepherd",
+      "name_ko": "목자",
+      "category": "서민·노동",
+      "note": "들판·성문 밖 배치. 지팡이와 어린 양을 함께 든 모습",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g04_shepherd.png (정면)",
+        "g04_shepherd_side.png (측면, 오른쪽 기준)",
+        "g04_shepherd_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g05_old_man",
+      "name_ko": "노인 남성",
+      "category": "서민·노동",
+      "note": "골목 어귀에 앉아 있는 배경 인물",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g05_old_man.png (정면)",
+        "g05_old_man_side.png (측면, 오른쪽 기준)",
+        "g05_old_man_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g06_old_woman",
+      "name_ko": "노파",
+      "category": "서민·노동",
+      "note": "베일을 쓴 연장자 여성",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g06_old_woman.png (정면)",
+        "g06_old_woman_side.png (측면, 오른쪽 기준)",
+        "g06_old_woman_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g07_beggar",
+      "name_ko": "거지",
+      "category": "서민·노동",
+      "note": "성전 문·성문 앞에 배치하는 구제 대상 인물",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g07_beggar.png (정면)",
+        "g07_beggar_side.png (측면, 오른쪽 기준)",
+        "g07_beggar_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g08_boy",
+      "name_ko": "아이(소년)",
+      "category": "서민·노동",
+      "note": "골목을 뛰어다니는 배경 군중용",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g08_boy.png (정면)",
+        "g08_boy_side.png (측면, 오른쪽 기준)",
+        "g08_boy_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g09_girl",
+      "name_ko": "아이(소녀)",
+      "category": "서민·노동",
+      "note": "골목을 뛰어다니는 배경 군중용",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g09_girl.png (정면)",
+        "g09_girl_side.png (측면, 오른쪽 기준)",
+        "g09_girl_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g10_bread_seller",
+      "name_ko": "빵장수",
+      "category": "상업·시장",
+      "note": "빵집·시장 좌판 앞에 배치",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g10_bread_seller.png (정면)",
+        "g10_bread_seller_side.png (측면, 오른쪽 기준)",
+        "g10_bread_seller_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g11_spice_merchant",
+      "name_ko": "향신료 상인",
+      "category": "상업·시장",
+      "note": "시장 좌판 상인. 값비싼 사프란 톤 옷감",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g11_spice_merchant.png (정면)",
+        "g11_spice_merchant_side.png (측면, 오른쪽 기준)",
+        "g11_spice_merchant_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g12_cloth_merchant",
+      "name_ko": "옷감 상인",
+      "category": "상업·시장",
+      "note": "염색 옷감을 파는 부유한 시장 상인",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g12_cloth_merchant.png (정면)",
+        "g12_cloth_merchant_side.png (측면, 오른쪽 기준)",
+        "g12_cloth_merchant_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g13_money_changer",
+      "name_ko": "환전상",
+      "category": "상업·시장",
+      "note": "성전 뜰 바깥 환전상 탁자와 짝지어 배치",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g13_money_changer.png (정면)",
+        "g13_money_changer_side.png (측면, 오른쪽 기준)",
+        "g13_money_changer_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g14_potter",
+      "name_ko": "도공",
+      "category": "상업·시장",
+      "note": "공방 타일과 함께 배치하는 장인",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g14_potter.png (정면)",
+        "g14_potter_side.png (측면, 오른쪽 기준)",
+        "g14_potter_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g15_blacksmith",
+      "name_ko": "대장장이",
+      "category": "상업·시장",
+      "note": "반개방형 공방 타일과 짝지어 배치",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g15_blacksmith.png (정면)",
+        "g15_blacksmith_side.png (측면, 오른쪽 기준)",
+        "g15_blacksmith_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g16_pharisee",
+      "name_ko": "바리새인",
+      "category": "종교 계층",
+      "note": "넓은 술(tzitzit) 장식 옷단이 특징인 율법 준수자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g16_pharisee.png (정면)",
+        "g16_pharisee_side.png (측면, 오른쪽 기준)",
+        "g16_pharisee_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g17_sadducee",
+      "name_ko": "사두개인",
+      "category": "종교 계층",
+      "note": "제사장 귀족 계층. 값비싼 청색 옷",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g17_sadducee.png (정면)",
+        "g17_sadducee_side.png (측면, 오른쪽 기준)",
+        "g17_sadducee_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g18_scribe",
+      "name_ko": "서기관(율법학자)",
+      "category": "종교 계층",
+      "note": "기록·낭독 담당. 필기구 상자를 든 모습",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g18_scribe.png (정면)",
+        "g18_scribe_side.png (측면, 오른쪽 기준)",
+        "g18_scribe_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g19_temple_priest",
+      "name_ko": "성전 제사장",
+      "category": "종교 계층",
+      "note": "출애굽기 제사장 예복(세마포+청홍자색)을 단순화해 표현",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g19_temple_priest.png (정면)",
+        "g19_temple_priest_side.png (측면, 오른쪽 기준)",
+        "g19_temple_priest_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g20_levite",
+      "name_ko": "레위인(성전 봉사자)",
+      "category": "종교 계층",
+      "note": "성전 음악·잡무를 맡은 봉사 계층. 나팔을 든 모습",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g20_levite.png (정면)",
+        "g20_levite_side.png (측면, 오른쪽 기준)",
+        "g20_levite_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g21_synagogue_leader",
+      "name_ko": "회당장/랍비",
+      "category": "종교 계층",
+      "note": "동네 회당에서 가르치는 인물. 토라 두루마리",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g21_synagogue_leader.png (정면)",
+        "g21_synagogue_leader_side.png (측면, 오른쪽 기준)",
+        "g21_synagogue_leader_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g22_legionary",
+      "name_ko": "로마 군단병",
+      "category": "로마·통제",
+      "note": "안토니아 요새·성문 경비용 기본 병사",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g22_legionary.png (정면)",
+        "g22_legionary_side.png (측면, 오른쪽 기준)",
+        "g22_legionary_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g23_centurion",
+      "name_ko": "백부장",
+      "category": "로마·통제",
+      "note": "붉은 지휘관 망토를 두른 백인대장",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g23_centurion.png (정면)",
+        "g23_centurion_side.png (측면, 오른쪽 기준)",
+        "g23_centurion_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g24_roman_official",
+      "name_ko": "로마 관리(행정관)",
+      "category": "로마·통제",
+      "note": "자주색 단(purple stripe) 토가를 입은 문관",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g24_roman_official.png (정면)",
+        "g24_roman_official_side.png (측면, 오른쪽 기준)",
+        "g24_roman_official_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g25_praetorium_guard",
+      "name_ko": "프라이토리움 근위병",
+      "category": "로마·통제",
+      "note": "총독 관저 경비. 창 대신 검+방패로 단순화",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g25_praetorium_guard.png (정면)",
+        "g25_praetorium_guard_side.png (측면, 오른쪽 기준)",
+        "g25_praetorium_guard_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g26_wealthy_merchant",
+      "name_ko": "부유한 상인",
+      "category": "상류층",
+      "note": "자주색 옷을 입을 수 있을 만큼 부유한 상인",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g26_wealthy_merchant.png (정면)",
+        "g26_wealthy_merchant_side.png (측면, 오른쪽 기준)",
+        "g26_wealthy_merchant_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g27_sanhedrin_member",
+      "name_ko": "산헤드린 공회원",
+      "category": "상류층",
+      "note": "공회에 참석하는 원로. 왕자색 예복",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g27_sanhedrin_member.png (정면)",
+        "g27_sanhedrin_member_side.png (측면, 오른쪽 기준)",
+        "g27_sanhedrin_member_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g28_noblewoman",
+      "name_ko": "귀부인",
+      "category": "상류층",
+      "note": "상부 도시 저택 거주자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g28_noblewoman.png (정면)",
+        "g28_noblewoman_side.png (측면, 오른쪽 기준)",
+        "g28_noblewoman_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g29_pilgrim_father",
+      "name_ko": "순례자 아버지",
+      "category": "순례자",
+      "note": "유월절 순례 인파. 지팡이를 짚은 가장",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g29_pilgrim_father.png (정면)",
+        "g29_pilgrim_father_side.png (측면, 오른쪽 기준)",
+        "g29_pilgrim_father_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g30_pilgrim_mother",
+      "name_ko": "순례자 어머니",
+      "category": "순례자",
+      "note": "가족 단위 순례객",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g30_pilgrim_mother.png (정면)",
+        "g30_pilgrim_mother_side.png (측면, 오른쪽 기준)",
+        "g30_pilgrim_mother_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g31_traveler",
+      "name_ko": "나그네(여행자)",
+      "category": "순례자",
+      "note": "먼 길을 걸어온 여행자. 지팡이",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g31_traveler.png (정면)",
+        "g31_traveler_side.png (측면, 오른쪽 기준)",
+        "g31_traveler_back.png (후면)"
+      ]
+    },
+    {
+      "key": "g32_diaspora_pilgrim",
+      "name_ko": "디아스포라 순례자",
+      "category": "순례자",
+      "note": "사도행전 2장의 여러 민족 순례객을 반영한 짙은 피부톤",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "g32_diaspora_pilgrim.png (정면)",
+        "g32_diaspora_pilgrim_side.png (측면, 오른쪽 기준)",
+        "g32_diaspora_pilgrim_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b01_jesus",
+      "name_ko": "나사렛 예수",
+      "category": "성경 인물",
+      "note": "흰 세마포+청색 겉옷, 얇은 금테 후광으로 표현",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b01_jesus.png (정면)",
+        "b01_jesus_side.png (측면, 오른쪽 기준)",
+        "b01_jesus_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b02_mary_mother",
+      "name_ko": "마리아(예수의 모친)",
+      "category": "성경 인물",
+      "note": "전통적 도상학의 청색 베일",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b02_mary_mother.png (정면)",
+        "b02_mary_mother_side.png (측면, 오른쪽 기준)",
+        "b02_mary_mother_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b03_mary_magdalene",
+      "name_ko": "막달라 마리아",
+      "category": "성경 인물",
+      "note": "향유 옥합을 든 모습(누가복음 7장/요한복음 12장 참조)",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b03_mary_magdalene.png (정면)",
+        "b03_mary_magdalene_side.png (측면, 오른쪽 기준)",
+        "b03_mary_magdalene_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b04_john_baptist",
+      "name_ko": "세례 요한",
+      "category": "성경 인물",
+      "note": "낙타털 옷과 가죽띠(마태복음 3:4)를 거친 질감으로 표현",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b04_john_baptist.png (정면)",
+        "b04_john_baptist_side.png (측면, 오른쪽 기준)",
+        "b04_john_baptist_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b05_peter",
+      "name_ko": "시몬 베드로",
+      "category": "성경 인물",
+      "note": "천국 열쇠(마태복음 16:19)를 든 수제자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b05_peter.png (정면)",
+        "b05_peter_side.png (측면, 오른쪽 기준)",
+        "b05_peter_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b06_andrew",
+      "name_ko": "안드레",
+      "category": "성경 인물",
+      "note": "베드로의 형제. 본래 어부",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b06_andrew.png (정면)",
+        "b06_andrew_side.png (측면, 오른쪽 기준)",
+        "b06_andrew_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b07_james_zebedee",
+      "name_ko": "야고보(세베대의 아들)",
+      "category": "성경 인물",
+      "note": "요한의 형제. 어부 출신",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b07_james_zebedee.png (정면)",
+        "b07_james_zebedee_side.png (측면, 오른쪽 기준)",
+        "b07_james_zebedee_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b08_john_apostle",
+      "name_ko": "사도 요한",
+      "category": "성경 인물",
+      "note": "최연소 제자. 전통적으로 수염 없이 묘사",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b08_john_apostle.png (정면)",
+        "b08_john_apostle_side.png (측면, 오른쪽 기준)",
+        "b08_john_apostle_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b09_philip",
+      "name_ko": "빌립",
+      "category": "성경 인물",
+      "note": "벳새다 출신 제자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b09_philip.png (정면)",
+        "b09_philip_side.png (측면, 오른쪽 기준)",
+        "b09_philip_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b10_bartholomew",
+      "name_ko": "바돌로매(나다나엘)",
+      "category": "성경 인물",
+      "note": "'간사한 것이 없는' 제자(요한복음 1:47)",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b10_bartholomew.png (정면)",
+        "b10_bartholomew_side.png (측면, 오른쪽 기준)",
+        "b10_bartholomew_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b11_thomas",
+      "name_ko": "도마",
+      "category": "성경 인물",
+      "note": "의심 많은 도마로 알려진 제자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b11_thomas.png (정면)",
+        "b11_thomas_side.png (측면, 오른쪽 기준)",
+        "b11_thomas_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b12_matthew",
+      "name_ko": "마태",
+      "category": "성경 인물",
+      "note": "전 세리(레위). 장부를 든 모습으로 직업을 표현",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b12_matthew.png (정면)",
+        "b12_matthew_side.png (측면, 오른쪽 기준)",
+        "b12_matthew_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b13_james_alphaeus",
+      "name_ko": "야고보(알패오의 아들)",
+      "category": "성경 인물",
+      "note": "'작은 야고보'로도 불리는 제자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b13_james_alphaeus.png (정면)",
+        "b13_james_alphaeus_side.png (측면, 오른쪽 기준)",
+        "b13_james_alphaeus_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b14_thaddaeus",
+      "name_ko": "다대오(유다)",
+      "category": "성경 인물",
+      "note": "유다 다대오. 가룟 유다와 구분되는 제자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b14_thaddaeus.png (정면)",
+        "b14_thaddaeus_side.png (측면, 오른쪽 기준)",
+        "b14_thaddaeus_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b15_simon_zealot",
+      "name_ko": "열심당원 시몬",
+      "category": "성경 인물",
+      "note": "반로마 열심당 출신으로 알려진 제자",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b15_simon_zealot.png (정면)",
+        "b15_simon_zealot_side.png (측면, 오른쪽 기준)",
+        "b15_simon_zealot_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b16_judas_iscariot",
+      "name_ko": "가룟 유다",
+      "category": "성경 인물",
+      "note": "공동체의 돈궤를 맡았던 제자(요한복음 12:6)",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b16_judas_iscariot.png (정면)",
+        "b16_judas_iscariot_side.png (측면, 오른쪽 기준)",
+        "b16_judas_iscariot_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b17_pontius_pilate",
+      "name_ko": "본디오 빌라도",
+      "category": "성경 인물",
+      "note": "유대 총독. 로마 토가와 진홍 망토",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b17_pontius_pilate.png (정면)",
+        "b17_pontius_pilate_side.png (측면, 오른쪽 기준)",
+        "b17_pontius_pilate_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b18_caiaphas",
+      "name_ko": "대제사장 가야바",
+      "category": "성경 인물",
+      "note": "그 해의 대제사장. 금색 관과 세마포 예복",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b18_caiaphas.png (정면)",
+        "b18_caiaphas_side.png (측면, 오른쪽 기준)",
+        "b18_caiaphas_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b19_annas",
+      "name_ko": "안나스",
+      "category": "성경 인물",
+      "note": "가야바의 장인. 전 대제사장 원로",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b19_annas.png (정면)",
+        "b19_annas_side.png (측면, 오른쪽 기준)",
+        "b19_annas_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b20_herod_antipas",
+      "name_ko": "헤롯 안디바",
+      "category": "성경 인물",
+      "note": "갈릴리 분봉왕. 금색 관과 왕자색 망토",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b20_herod_antipas.png (정면)",
+        "b20_herod_antipas_side.png (측면, 오른쪽 기준)",
+        "b20_herod_antipas_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b21_nicodemus",
+      "name_ko": "니고데모",
+      "category": "성경 인물",
+      "note": "산헤드린 공회원이자 은밀한 제자(요한복음 3장)",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b21_nicodemus.png (정면)",
+        "b21_nicodemus_side.png (측면, 오른쪽 기준)",
+        "b21_nicodemus_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b22_joseph_arimathea",
+      "name_ko": "아리마대 요셉",
+      "category": "성경 인물",
+      "note": "예수의 시신을 수습한 부유한 공회원",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b22_joseph_arimathea.png (정면)",
+        "b22_joseph_arimathea_side.png (측면, 오른쪽 기준)",
+        "b22_joseph_arimathea_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b23_simon_cyrene",
+      "name_ko": "구레네 시몬",
+      "category": "성경 인물",
+      "note": "북아프리카 키레네 출신 디아스포라 유대인",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b23_simon_cyrene.png (정면)",
+        "b23_simon_cyrene_side.png (측면, 오른쪽 기준)",
+        "b23_simon_cyrene_back.png (후면)"
+      ]
+    },
+    {
+      "key": "b24_barabbas",
+      "name_ko": "바라바",
+      "category": "성경 인물",
+      "note": "사면받은 죄수. 거친 자루옷",
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "sprite_px": [
+        32,
+        48
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "variants": [
+        "b24_barabbas.png (정면)",
+        "b24_barabbas_side.png (측면, 오른쪽 기준)",
+        "b24_barabbas_back.png (후면)"
+      ]
+    }
+  ]
+}

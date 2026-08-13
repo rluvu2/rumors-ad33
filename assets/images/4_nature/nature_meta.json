@@ -1,0 +1,221 @@
+{
+  "tile_size": 32,
+  "objects": [
+    {
+      "key": "n01_olive_tree",
+      "name_ko": "올리브 나무",
+      "sprite_tiles": [
+        3,
+        3
+      ],
+      "sprite_px": [
+        96,
+        96
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "overhang_rows": 2,
+      "note": "수관은 통과, 줄기 1칸만 충돌"
+    },
+    {
+      "key": "n02_date_palm",
+      "name_ko": "대추야자 나무",
+      "sprite_tiles": [
+        2,
+        4
+      ],
+      "sprite_px": [
+        64,
+        128
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "overhang_rows": 3,
+      "note": "잎 3칸은 겹쳐 지나감"
+    },
+    {
+      "key": "n03_fig_tree",
+      "name_ko": "무화과 나무",
+      "sprite_tiles": [
+        3,
+        3
+      ],
+      "sprite_px": [
+        96,
+        96
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "overhang_rows": 2,
+      "note": "수관은 통과, 줄기 1칸만 충돌"
+    },
+    {
+      "key": "n04_cypress",
+      "name_ko": "사이프러스",
+      "sprite_tiles": [
+        1,
+        4
+      ],
+      "sprite_px": [
+        32,
+        128
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "overhang_rows": 3,
+      "note": "세로로 길어 원경 실루엣용"
+    },
+    {
+      "key": "n05_shrub",
+      "name_ko": "관목 덤불",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "overhang_rows": 0,
+      "note": "낮아 가림 없음"
+    },
+    {
+      "key": "n06_dry_thistle",
+      "name_ko": "마른 엉겅퀴",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "footprint_tiles": [
+        0,
+        0
+      ],
+      "overhang_rows": 1,
+      "note": "장식용, 충돌 없음"
+    },
+    {
+      "key": "n07_boulder",
+      "name_ko": "큰 바위",
+      "sprite_tiles": [
+        2,
+        2
+      ],
+      "sprite_px": [
+        64,
+        64
+      ],
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "overhang_rows": 1,
+      "note": "앞 1줄만 충돌"
+    },
+    {
+      "key": "n08_rock_cluster",
+      "name_ko": "작은 돌무더기",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "overhang_rows": 0,
+      "note": "넘어갈 수 없는 낮은 장애물"
+    },
+    {
+      "key": "n09_vine_trellis",
+      "name_ko": "포도 시렁",
+      "sprite_tiles": [
+        3,
+        2
+      ],
+      "sprite_px": [
+        96,
+        64
+      ],
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "overhang_rows": 1,
+      "note": "기둥 줄만 충돌, 아래 통행 가능"
+    },
+    {
+      "key": "n10_stone_well",
+      "name_ko": "돌 우물",
+      "sprite_tiles": [
+        2,
+        2
+      ],
+      "sprite_px": [
+        64,
+        64
+      ],
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "overhang_rows": 1,
+      "note": "정면 1줄 충돌 + 상호작용"
+    },
+    {
+      "key": "n11_jar_cluster",
+      "name_ko": "항아리 더미",
+      "sprite_tiles": [
+        1,
+        1
+      ],
+      "sprite_px": [
+        32,
+        32
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "overhang_rows": 0,
+      "note": "치우거나 깨뜨릴 수 있는 소품"
+    },
+    {
+      "key": "n12_olive_press",
+      "name_ko": "올리브 압착기",
+      "sprite_tiles": [
+        2,
+        2
+      ],
+      "sprite_px": [
+        64,
+        64
+      ],
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "overhang_rows": 1,
+      "note": "겟세마네·기름틀 연출용"
+    }
+  ]
+}

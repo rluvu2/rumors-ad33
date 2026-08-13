@@ -1,0 +1,257 @@
+{
+  "tile_size": 32,
+  "note": "sprite_tiles=이미지 크기, footprint_tiles=맵 점유(충돌), overhang_rows=통과 가능한 위쪽 줄 수",
+  "buildings": [
+    {
+      "key": "01_basic_mudbrick_house",
+      "name_ko": "기본 흙벽돌집",
+      "sprite_tiles": [
+        2,
+        3
+      ],
+      "sprite_px": [
+        64,
+        96
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        0
+      ],
+      "note": "위 1칸이 오버행. 뒷줄로 캐릭터가 지나가면 지붕에 가려짐"
+    },
+    {
+      "key": "02_tenement_block",
+      "name_ko": "확장형 다세대 주택",
+      "sprite_tiles": [
+        4,
+        4
+      ],
+      "sprite_px": [
+        128,
+        128
+      ],
+      "footprint_tiles": [
+        4,
+        3
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        1,
+        2
+      ],
+      "note": "앞으로 튀어나온 오른쪽 블록도 같은 발판에 포함"
+    },
+    {
+      "key": "03_awning_house",
+      "name_ko": "낡은 차양을 덧댄 집",
+      "sprite_tiles": [
+        2,
+        3
+      ],
+      "sprite_px": [
+        64,
+        96
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        0,
+        1
+      ],
+      "note": "차양이 발판 밖으로 나오지 않아 앞줄 통행 방해 없음"
+    },
+    {
+      "key": "04_bakery_with_oven",
+      "name_ko": "화덕이 있는 빵집",
+      "sprite_tiles": [
+        2,
+        3
+      ],
+      "sprite_px": [
+        64,
+        96
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        0,
+        1
+      ],
+      "note": "화덕·진열대가 앞줄에 걸려 앞줄 전체가 상호작용 칸"
+    },
+    {
+      "key": "05_open_workshop",
+      "name_ko": "반개방형 공방",
+      "sprite_tiles": [
+        3,
+        3
+      ],
+      "sprite_px": [
+        96,
+        96
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        0,
+        1,
+        2
+      ],
+      "note": "1층이 뚫려 있어 앞줄 전체에서 진입·대화"
+    },
+    {
+      "key": "06_arched_warehouse",
+      "name_ko": "아치형 창고 건물",
+      "sprite_tiles": [
+        2,
+        3
+      ],
+      "sprite_px": [
+        64,
+        96
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        0,
+        1
+      ],
+      "note": "잠긴 문 연출. 상호작용은 열쇠 이벤트용"
+    },
+    {
+      "key": "07_noble_marble_mansion",
+      "name_ko": "고위층 대리석 저택",
+      "sprite_tiles": [
+        4,
+        4
+      ],
+      "sprite_px": [
+        128,
+        128
+      ],
+      "footprint_tiles": [
+        4,
+        3
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        1,
+        2
+      ],
+      "note": "현관 계단이 발판 앞줄에 포함됨"
+    },
+    {
+      "key": "08_roman_barracks",
+      "name_ko": "로마 주둔군 병영",
+      "sprite_tiles": [
+        4,
+        3
+      ],
+      "sprite_px": [
+        128,
+        96
+      ],
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        1,
+        2
+      ],
+      "note": "성문 앞 2칸이 경비 배치 지점"
+    },
+    {
+      "key": "09_watchtower",
+      "name_ko": "수직 망루와 감시탑",
+      "sprite_tiles": [
+        2,
+        4
+      ],
+      "sprite_px": [
+        64,
+        128
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "overhang_rows": 2,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        0,
+        1
+      ],
+      "note": "오버행 2칸. 탑 아래를 지나면 확실히 가려져 압박감이 생김"
+    },
+    {
+      "key": "10_synagogue",
+      "name_ko": "동네 지역 회당",
+      "sprite_tiles": [
+        3,
+        4
+      ],
+      "sprite_px": [
+        96,
+        128
+      ],
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "overhang_rows": 1,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": [
+        0,
+        1,
+        2
+      ],
+      "note": "정면 3출입구 모두 진입 가능하게 설정"
+    },
+    {
+      "key": "11_temple_colonnade",
+      "name_ko": "성전 뜰 대리석 회랑",
+      "sprite_tiles": [
+        4,
+        3
+      ],
+      "sprite_px": [
+        128,
+        96
+      ],
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "overhang_rows": 2,
+      "anchor": "스프라이트 하단 중앙 = 발판 앞줄 하단",
+      "interact_tiles": null,
+      "note": "기둥 열(맨 앞 1줄)만 충돌. 뒤 2칸은 회랑 내부라 통행 가능"
+    }
+  ]
+}

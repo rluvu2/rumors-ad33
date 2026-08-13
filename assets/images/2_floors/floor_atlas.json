@@ -1,0 +1,178 @@
+{
+  "tile_size": 32,
+  "sheet": "floor_spritesheet.png",
+  "seamless": true,
+  "frames": [
+    {
+      "key": "f01_packed_dirt",
+      "name_ko": "다져진 흙바닥",
+      "category": "하부 도시",
+      "x": 0,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f02_dirt_gravel",
+      "name_ko": "자갈 섞인 흙길",
+      "category": "하부 도시",
+      "x": 32,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f03_mud_puddle",
+      "name_ko": "진흙 웅덩이",
+      "category": "하부 도시",
+      "x": 64,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f04_straw_dirt",
+      "name_ko": "밀짚 흩어진 바닥",
+      "category": "하부 도시",
+      "x": 96,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f05_rough_cobble",
+      "name_ko": "거친 돌포장",
+      "category": "상업·시장",
+      "x": 128,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f06_cobble_worn",
+      "name_ko": "닳고 잡초 낀 포장",
+      "category": "상업·시장",
+      "x": 0,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f07_drain_channel",
+      "name_ko": "중앙 배수 도랑",
+      "category": "상업·시장",
+      "x": 32,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f08_market_spill",
+      "name_ko": "곡물·향신료 자국",
+      "category": "상업·시장",
+      "x": 64,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f09_limestone_slab",
+      "name_ko": "석회암 판석",
+      "category": "부유층·로마",
+      "x": 96,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f10_roman_flagstone",
+      "name_ko": "로마식 대형 판석",
+      "category": "부유층·로마",
+      "x": 128,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f11_marble_checker",
+      "name_ko": "대리석 정방형 포장",
+      "category": "부유층·로마",
+      "x": 0,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f12_mosaic_geometric",
+      "name_ko": "기하 문양 모자이크",
+      "category": "부유층·로마",
+      "x": 32,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f13_temple_white_slab",
+      "name_ko": "성전 뜰 백색 석판",
+      "category": "종교·공공",
+      "x": 64,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f14_temple_border",
+      "name_ko": "성전 뜰 경계 문양띠",
+      "category": "종교·공공",
+      "x": 96,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f15_stone_step",
+      "name_ko": "돌계단",
+      "category": "종교·공공",
+      "x": 128,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f16_rooftop_clay",
+      "name_ko": "평지붕 옥상 바닥",
+      "category": "기타",
+      "x": 0,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f17_cistern_water",
+      "name_ko": "수조·못 물",
+      "category": "기타",
+      "x": 32,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f18_dry_grass",
+      "name_ko": "마른 풀·올리브 뜰",
+      "category": "기타",
+      "x": 64,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "f19_temple_court_dirt",
+      "name_ko": "성전 뜰 석회 바닥",
+      "category": "종교·공공",
+      "x": 96,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    }
+  ]
+}

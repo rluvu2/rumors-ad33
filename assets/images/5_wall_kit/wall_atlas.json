@@ -1,0 +1,384 @@
+{
+  "tile_size": 32,
+  "note": "wall_/cap_/base_는 가로 반복, side_face는 세로 반복 가능",
+  "frames": [
+    {
+      "key": "w_m_wall_mid",
+      "material": "흙벽돌(서민 주거)",
+      "part": "wall_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_wall_left",
+      "material": "흙벽돌(서민 주거)",
+      "part": "wall_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_wall_right",
+      "material": "흙벽돌(서민 주거)",
+      "part": "wall_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_cap_mid",
+      "material": "흙벽돌(서민 주거)",
+      "part": "cap_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_cap_left",
+      "material": "흙벽돌(서민 주거)",
+      "part": "cap_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_cap_right",
+      "material": "흙벽돌(서민 주거)",
+      "part": "cap_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_base_mid",
+      "material": "흙벽돌(서민 주거)",
+      "part": "base_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_base_left",
+      "material": "흙벽돌(서민 주거)",
+      "part": "base_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_base_right",
+      "material": "흙벽돌(서민 주거)",
+      "part": "base_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_side_face_l",
+      "material": "흙벽돌(서민 주거)",
+      "part": "side_face_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_side_face_r",
+      "material": "흙벽돌(서민 주거)",
+      "part": "side_face_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_side_cap_l",
+      "material": "흙벽돌(서민 주거)",
+      "part": "side_cap_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_side_cap_r",
+      "material": "흙벽돌(서민 주거)",
+      "part": "side_cap_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_corner_inner_l",
+      "material": "흙벽돌(서민 주거)",
+      "part": "corner_inner_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_corner_inner_r",
+      "material": "흙벽돌(서민 주거)",
+      "part": "corner_inner_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_alley_gap",
+      "material": "흙벽돌(서민 주거)",
+      "part": "alley_gap",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_door",
+      "material": "흙벽돌(서민 주거)",
+      "part": "door",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_m_window",
+      "material": "흙벽돌(서민 주거)",
+      "part": "window",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_wall_mid",
+      "material": "석회암(공공·부유층)",
+      "part": "wall_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_wall_left",
+      "material": "석회암(공공·부유층)",
+      "part": "wall_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_wall_right",
+      "material": "석회암(공공·부유층)",
+      "part": "wall_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_cap_mid",
+      "material": "석회암(공공·부유층)",
+      "part": "cap_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_cap_left",
+      "material": "석회암(공공·부유층)",
+      "part": "cap_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_cap_right",
+      "material": "석회암(공공·부유층)",
+      "part": "cap_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_base_mid",
+      "material": "석회암(공공·부유층)",
+      "part": "base_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_base_left",
+      "material": "석회암(공공·부유층)",
+      "part": "base_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_base_right",
+      "material": "석회암(공공·부유층)",
+      "part": "base_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_side_face_l",
+      "material": "석회암(공공·부유층)",
+      "part": "side_face_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_side_face_r",
+      "material": "석회암(공공·부유층)",
+      "part": "side_face_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_side_cap_l",
+      "material": "석회암(공공·부유층)",
+      "part": "side_cap_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_side_cap_r",
+      "material": "석회암(공공·부유층)",
+      "part": "side_cap_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_corner_inner_l",
+      "material": "석회암(공공·부유층)",
+      "part": "corner_inner_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_corner_inner_r",
+      "material": "석회암(공공·부유층)",
+      "part": "corner_inner_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_alley_gap",
+      "material": "석회암(공공·부유층)",
+      "part": "alley_gap",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_door",
+      "material": "석회암(공공·부유층)",
+      "part": "door",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_s_window",
+      "material": "석회암(공공·부유층)",
+      "part": "window",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_wall_mid",
+      "material": "로마 회색석재(요새)",
+      "part": "wall_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_wall_left",
+      "material": "로마 회색석재(요새)",
+      "part": "wall_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_wall_right",
+      "material": "로마 회색석재(요새)",
+      "part": "wall_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_cap_mid",
+      "material": "로마 회색석재(요새)",
+      "part": "cap_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_cap_left",
+      "material": "로마 회색석재(요새)",
+      "part": "cap_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_cap_right",
+      "material": "로마 회색석재(요새)",
+      "part": "cap_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_base_mid",
+      "material": "로마 회색석재(요새)",
+      "part": "base_mid",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_base_left",
+      "material": "로마 회색석재(요새)",
+      "part": "base_left",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_base_right",
+      "material": "로마 회색석재(요새)",
+      "part": "base_right",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_side_face_l",
+      "material": "로마 회색석재(요새)",
+      "part": "side_face_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_side_face_r",
+      "material": "로마 회색석재(요새)",
+      "part": "side_face_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_side_cap_l",
+      "material": "로마 회색석재(요새)",
+      "part": "side_cap_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_side_cap_r",
+      "material": "로마 회색석재(요새)",
+      "part": "side_cap_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_corner_inner_l",
+      "material": "로마 회색석재(요새)",
+      "part": "corner_inner_l",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_corner_inner_r",
+      "material": "로마 회색석재(요새)",
+      "part": "corner_inner_r",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_alley_gap",
+      "material": "로마 회색석재(요새)",
+      "part": "alley_gap",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_door",
+      "material": "로마 회색석재(요새)",
+      "part": "door",
+      "w": 32,
+      "h": 32
+    },
+    {
+      "key": "w_r_window",
+      "material": "로마 회색석재(요새)",
+      "part": "window",
+      "w": 32,
+      "h": 32
+    }
+  ]
+}
