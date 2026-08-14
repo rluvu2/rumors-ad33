@@ -92,22 +92,31 @@
   /* ══════════════════════════════════════════
      3. 주인공
      ══════════════════════════════════════════ */
+  /* input 은 두 가지로 들어옵니다.
+       열쇠판 — left·right·up·down 참거짓
+       조이스틱 — ax·ay 에 길이 1로 맞춘 방향 (main.js 가 기울인 만큼 재서 넘깁니다)
+     둘 다 run 으로 달립니다 (조이스틱은 끝까지 밀면 run 이 켜집니다) */
   function updatePlayer(world, p, dt, input, blockers) {
     let vx = 0, vy = 0;
-    if (input.left)  vx -= 1;
-    if (input.right) vx += 1;
-    if (input.up)    vy -= 1;
-    if (input.down)  vy += 1;
+    const stick = (input.ax || input.ay);
+    if (stick) {
+      vx = input.ax; vy = input.ay;
+    } else {
+      if (input.left)  vx -= 1;
+      if (input.right) vx += 1;
+      if (input.up)    vy -= 1;
+      if (input.down)  vy += 1;
+    }
 
     p.moving = (vx !== 0 || vy !== 0);
     if (!p.moving) { p.animT = 0; p.frame = 0; return false; }
 
-    if (vx && vy) { const k = Math.SQRT1_2; vx *= k; vy *= k; }   // 대각선도 같은 속도로
+    // 열쇠판의 대각선만 보정합니다 (조이스틱은 이미 길이가 1입니다)
+    if (!stick && vx && vy) { const k = Math.SQRT1_2; vx *= k; vy *= k; }
     const spd = p.speed * (input.run ? p.run : 1) * dt;
-    if (vy < 0) p.dir = 'up';
-    if (vy > 0) p.dir = 'down';
-    if (vx < 0) p.dir = 'left';
-    if (vx > 0) p.dir = 'right';
+    // 더 많이 기운 축으로 몸을 돌린다 (같으면 좌우가 이깁니다 — 열쇠판 때와 같게)
+    if (Math.abs(vx) >= Math.abs(vy)) p.dir = vx < 0 ? 'left' : 'right';
+    else p.dir = vy < 0 ? 'up' : 'down';
 
     const a = moveEntity(world, p, vx * spd, 0, blockers, true);
     const b = moveEntity(world, p, 0, vy * spd, blockers, true);

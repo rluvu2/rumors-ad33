@@ -103,12 +103,66 @@
   addEventListener('keyup', e => release(e.code));
   addEventListener('blur', () => { held.clear(); escDown = false; paintCaps(); padClear(); });
 
-  /* ── 터치 십자키 ──
+  /* ══════════════════════════════════════════
+     1-b. 조이스틱 — 민 쪽으로 걷고, 테두리까지 밀면 달린다
+
+     한가운데(.stick 의 복판)를 기준으로 손가락이 얼마나, 어디로 밀렸는지를 재서
+     길이 1짜리 방향과 세기를 냅니다. 세기가 RUN 을 넘으면 달립니다.
+     세로로 든 폰에서는 화면을 90도 돌려 놓았으므로(style.css) 손가락이 민 방향도
+     함께 돌아갑니다 — turned() 일 때 되돌려 읽습니다.
+     ══════════════════════════════════════════ */
+  const STICK = { r: 46, dead: 0.22, run: 0.74 };
+  const stick = { id: null, ax: 0, ay: 0, mag: 0 };
+  const stickEl = rd('stick'), knobEl = rd('stickKnob');
+
+  /* style.css 의 «세로로 든 휴대폰» 규칙과 글자 하나까지 같아야 합니다 */
+  const TURNED = matchMedia('(orientation:portrait) and (pointer:coarse)');
+  const turned = () => TURNED.matches;
+
+  function stickAt(x, y) {
+    const r = stickEl.getBoundingClientRect();
+    if (!r.width) { stickOff(); return; }     // 감춰져 있다(대화 중) — 자리를 잴 수 없으므로 놓는다
+    let dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height / 2);
+    if (turned()) { const t = dx; dx = dy; dy = -t; }      // 돌려 놓은 만큼 되돌린다
+    const d = Math.hypot(dx, dy);
+    if (d < 0.001) { stick.ax = stick.ay = stick.mag = 0; return paintStick(0, 0); }
+    const m = Math.min(1, d / STICK.r);
+    stick.ax = dx / d; stick.ay = dy / d; stick.mag = m;
+    paintStick(stick.ax * m * STICK.r, stick.ay * m * STICK.r);
+  }
+  function paintStick(kx, ky) {
+    if (knobEl) knobEl.style.transform = `translate(${kx.toFixed(1)}px, ${ky.toFixed(1)}px)`;
+    if (stickEl) stickEl.classList.toggle('is-run', stick.mag >= STICK.run);
+  }
+  function stickOff() {
+    stick.id = null; stick.ax = 0; stick.ay = 0; stick.mag = 0;
+    if (knobEl) knobEl.style.transform = '';
+    if (stickEl) stickEl.classList.remove('is-on', 'is-run');
+  }
+  if (stickEl) {
+    stickEl.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      if (stick.id !== null) return;
+      stick.id = e.pointerId;
+      stickEl.classList.add('is-on');
+      Snd.unlock();
+      if (stickEl.hasPointerCapture && stickEl.hasPointerCapture(e.pointerId))
+        stickEl.releasePointerCapture(e.pointerId);       // 칸 밖으로 나가도 계속 따라오게
+      stickAt(e.clientX, e.clientY);
+    });
+    stickEl.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+    stickEl.addEventListener('contextmenu', e => e.preventDefault());
+    stickEl.addEventListener('dragstart', e => e.preventDefault());
+  }
+  addEventListener('pointermove', e => { if (e.pointerId === stick.id) stickAt(e.clientX, e.clientY); });
+  addEventListener('pointerup', e => { if (e.pointerId === stick.id) stickOff(); });
+  addEventListener('pointercancel', e => { if (e.pointerId === stick.id) stickOff(); });
+
+  /* ── 터치 단추(살펴보기) ──
      휴대폰에서 오래 누르면 글자가 잡히면서 «복사 · 모두 선택» 상자가 뜨던 문제 때문에
      기본 동작(선택 · 끌기 · 문맥 차림표 · 두 번 눌러 확대)을 전부 막고 손으로 다룹니다.
      터치는 처음 누른 단추에 이벤트가 묶이므로(암묵적 포인터 캡처) 그 묶음을 풀고,
-     손가락이 지금 어느 칸 위에 있는지는 좌표로 직접 찾습니다 — 그래야 십자키 위에서
-     손가락을 미끄러뜨려 방향을 바꿀 수 있고, 칸 밖으로 빠져나가면 확실히 떼어집니다 */
+     손가락이 지금 어느 칸 위에 있는지는 좌표로 직접 찾습니다 */
   const padHeld = new Map();                   // pointerId → 누르고 있는 단추
   const padAt = (x, y) => {
     const el = document.elementFromPoint(x, y);
@@ -127,7 +181,7 @@
     b.classList.remove('is-down');
     release(b.dataset.pad);
   }
-  const padClear = () => { for (const id of [...padHeld.keys()]) padUp(id); };
+  const padClear = () => { for (const id of [...padHeld.keys()]) padUp(id); stickOff(); };
 
   for (const b of document.querySelectorAll('[data-pad]')) {
     b.addEventListener('pointerdown', e => {
@@ -155,6 +209,49 @@
   cv.addEventListener('pointerdown', () => { cv.focus(); Snd.unlock(); });
   cv.addEventListener('contextmenu', e => e.preventDefault());
   rd('btnPause').addEventListener('click', () => pause());   // 터치 기기에는 Esc 가 없다
+
+  /* ══════════════════════════════════════════
+     1-c. 휴대폰 살림살이 — 주소창 · 화면 방향 · 꺼짐 방지
+
+     주소창이 화면 높이를 먹어 게임 칸이 작아지는데, 이걸 없애는 길은 전체 화면뿐입니다.
+     안드로이드는 요청이 먹히고, 아이폰 사파리는 이 요청을 받지 않으므로
+     그쪽은 style.css 의 «세로로 든 휴대폰» 규칙(화면을 90도 눕히기)과
+     100dvh 로 버팁니다. 홈 화면에 얹으면(apple-mobile-web-app-capable) 처음부터 전체 화면입니다.
+     ══════════════════════════════════════════ */
+  const touch = () => matchMedia('(pointer:coarse)').matches;
+  const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  const fsCan = () => !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  function lockLandscape() {
+    const o = screen.orientation;
+    if (o && o.lock) { try { o.lock('landscape').catch(() => {}); } catch (e) { /* 막히면 그만 */ } }
+  }
+  function goFull() {
+    if (!fsCan() || fsOn()) return;
+    const el = document.documentElement;
+    const go = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' })
+             : el.webkitRequestFullscreen ? el.webkitRequestFullscreen() : null;
+    Promise.resolve(go).then(lockLandscape, () => {});
+  }
+  function exitFull() {
+    if (!fsOn()) return;
+    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+  const btnFull = rd('btnFull');
+  if (btnFull) btnFull.addEventListener('click', () => {
+    if (fsOn()) exitFull(); else goFull();
+    cv.focus();
+  });
+
+  /* 화면이 저절로 꺼지지 않게 — 조이스틱만 만지다 보면 «손을 안 댄» 것으로 치는 폰이 있습니다 */
+  let wake = null;
+  async function keepAwake() {
+    if (!('wakeLock' in navigator) || wake) return;
+    try { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); }
+    catch (e) { wake = null; }
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && started) keepAwake(); });
 
   /* ══════════════════════════════════════════
      1-b. 수첩 — 오늘 할 일과 소문을 화면 안에서 펼쳐 본다
@@ -230,6 +327,7 @@
       else n.dir = dy > 0 ? 'down' : 'up';
       Snd.play('talk', 0.8);
       Dlg.talkTo(n);
+      stickOff();                                                     // 대사창이 조이스틱을 덮는다
       Quest.on('talk', n);
       return;
     }
@@ -238,6 +336,7 @@
       if (o.game && Mini.has(o.game)) { openMini(o.game); return; }   // 좌판의 작은 판
       const a = A.ATLAS[o.a];
       Dlg.lookAt(a.name, o.talk || [a.note || '…'], o.to ? o : null);
+      stickOff();
       Quest.on('look', o);
       return;
     }
@@ -350,6 +449,8 @@
     applyPhase();                                // 낮 몫 사람들을 세운다
     if (clockEl.root) clockEl.root.classList.add('is-on');
     paintClock();
+    // 시작 단추를 누른 «그 손짓» 안에서만 전체 화면을 얻을 수 있습니다
+    if (touch()) { goFull(); keepAwake(); }
     cardT = 1.8;
     cv.focus();
     last = performance.now();
@@ -424,11 +525,13 @@
     napTick(dt);
     const free = !Dlg.isOpen() && trans.phase === 'none' && !Quest.busy() && !Mini.isOpen()
                  && !bookOn && !nap.on;
+    const onStick = free && stick.mag > STICK.dead;      // 가운데 언저리는 멈춤으로 친다
     const input = {
       left:  free && held.has('KeyA'), right: free && held.has('KeyD'),
       up:    free && held.has('KeyW'), down:  free && held.has('KeyS'),
-      run:   held.has('ShiftLeft')
+      run:   held.has('ShiftLeft') || (onStick && stick.mag >= STICK.run)
     };
+    if (onStick) { input.ax = stick.ax; input.ay = stick.ay; }
     Actors.updatePlayer(w, player, dt, input, npcs);
     Snd.step(dt, player.moving, input.run);
 

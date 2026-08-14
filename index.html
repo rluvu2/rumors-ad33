@@ -2,7 +2,13 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<!-- 휴대폰에서 주소창을 걷어내기 위한 것들. 홈 화면에 얹으면 처음부터 전체 화면으로 열립니다 -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="루머스 AD 33">
+<meta name="theme-color" content="#0B0F0C">
 <title>루머스 AD 33</title>
 <!-- 진짜 게임 화면입니다. 계기판(판독·장소 이동·규격 표시)이 붙은 개발용 창은 debug.html -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -164,19 +170,21 @@
           <dt>R</dt><dd>눈 붙이기 — 할 일을 다 했을 때 남은 시간을 건너뜁니다</dd>
           <dt>Esc</dt><dd>잠시 멈춤</dd>
         </dl>
-        <p class="brief__touch">휴대폰은 화면 아래 왼쪽 <b>십자키</b>와 오른쪽 <b>«살펴보기»</b>,
-        오른쪽 위 <b>할 일 · 소문</b> 단추로 합니다.</p>
+        <p class="brief__touch">휴대폰은 왼쪽 아래 <b>조이스틱</b>으로 걷고 —
+        <b>끝까지 밀면 달립니다</b> — 오른쪽 <b>«살펴보기»</b>로 말을 겁니다.
+        세로로 들어도 화면은 <b>저절로 가로로</b> 돌아가고, 오른쪽 위 <b>⛶</b> 로 주소창을 걷어냅니다.</p>
         <button class="brief__go" id="briefGo" type="button">SPACE — 시작</button>
       </div>
     </div>
 
-    <!-- 십자키 — 글자는 CSS(::before)로 그려 넣습니다.
-         단추 안에 진짜 글자가 있으면 휴대폰에서 길게 눌렀을 때 그 글자가 잡히면서
-         «복사 · 모두 선택» 상자가 떠 버립니다. 만들어진 글자는 잡히지 않습니다 -->
-    <div class="pad" id="pad" aria-hidden="true">
-      <span></span><button type="button" class="pad__b" data-pad="KeyW" data-glyph="↑"></button><span></span>
-      <button type="button" class="pad__b" data-pad="KeyA" data-glyph="←"></button><span></span><button type="button" class="pad__b" data-pad="KeyD" data-glyph="→"></button>
-      <span></span><button type="button" class="pad__b" data-pad="KeyS" data-glyph="↓"></button><span></span>
+    <!-- 조이스틱 — 민 쪽으로 걷고, 끝까지 밀면 달립니다 (main.js 의 stick).
+         네모 칸 전체가 손가락을 받으므로 가장자리를 짚어도 잡힙니다.
+         글자를 넣지 않는 이유: 휴대폰에서 길게 누르면 그 글자가 잡히면서
+         «복사 · 모두 선택» 상자가 떠 버립니다 -->
+    <div class="stick" id="stick" aria-hidden="true">
+      <i class="stick__ring"></i>
+      <i class="stick__knob" id="stickKnob"></i>
+      <i class="stick__hint"></i>
     </div>
     <button type="button" class="pad__a" data-pad="Space" data-glyph="살펴보기" aria-hidden="true"></button>
 
@@ -187,6 +195,9 @@
       <!-- 눈 붙이기 — 이 마디 할 일을 다 했을 때만 나옵니다 (main.js 의 paintRest) -->
       <button class="hud__b hud__b--rest" id="btnRest" type="button"
               title="눈 붙이기 (R) — 해가 질 때까지 건너뜁니다"><span id="restLab">눈 붙이기</span><small>R</small></button>
+      <!-- 전체 화면 — 휴대폰 주소창을 걷어냅니다. 손가락 기기에서만 보입니다 -->
+      <button class="hud__b hud__b--icon hud__b--full" id="btnFull" type="button"
+              title="전체 화면" aria-label="전체 화면">⛶</button>
       <button class="hud__b hud__b--icon" id="btnPause" type="button" title="잠시 멈춤 (Esc)" aria-label="잠시 멈춤">⏸</button>
     </div>
 
@@ -265,7 +276,7 @@
         <h2 class="title__head">CONTROLS<small>조작법</small></h2>
         <dl class="help">
           <dt>W A S D</dt><dd>걷기 (방향키도 됩니다)</dd>
-          <dt>Shift</dt><dd>달리기</dd>
+          <dt>Shift</dt><dd>달리기 — 휴대폰은 <b>조이스틱을 끝까지</b> 밀면 달립니다</dd>
           <dt>Space</dt><dd>말 걸기 · 살펴보기 · 문으로 들어가기 (E · Enter 도 됩니다)</dd>
           <dt>T · N</dt><dd>오늘 할 일 · 소문 수첩 펼쳐 보기 (오른쪽 위 단추와 같습니다)</dd>
           <dt>R</dt><dd><b>눈 붙이기</b> — 이 마디 할 일을 다 했을 때만 열립니다.
@@ -279,8 +290,10 @@
         목표가 되는 사람·물건 위에는 <b>금색 ▼</b> 가 붙고, 화면 밖에 있으면 <b>가장자리에 화살표</b>가 섭니다.<br>
         사람에게 말을 걸면 아직 못 들은 <b>소문</b>이 한 자락씩 붙습니다.
         들은 소문은 <b>수첩</b>에 쌓이고, 성 안 사람들이 그 이야기를 옮기기 시작합니다.<br>
-        휴대폰에서는 화면 아래 왼쪽 <b>십자키</b>와 오른쪽 <b>«살펴보기»</b>로 움직이고,
-        오른쪽 위 <b>할 일 · 소문 · ⏸</b> 단추를 씁니다. <b>가로로 돌리면</b> 화면이 훨씬 커집니다.</p>
+        휴대폰에서는 왼쪽 아래 <b>조이스틱</b>으로 걷고(끝까지 밀면 <b>달립니다</b>),
+        오른쪽 <b>«살펴보기»</b>로 말을 겁니다. 오른쪽 위는 <b>할 일 · 소문 · ⛶ · ⏸</b> 입니다.<br>
+        세로로 들어도 화면이 <b>저절로 가로로</b> 눕고, <b>⛶</b> 를 누르면 주소창까지 걷어내
+        화면을 가장 크게 씁니다. 대화 중에는 조이스틱이 잠시 숨습니다(어차피 발이 묶입니다).</p>
         <nav class="menu menu--row"><button class="menu__item" data-back="1">BACK</button></nav>
       </div>
 

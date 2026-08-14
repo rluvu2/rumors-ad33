@@ -54,10 +54,33 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:16/11;border-radius:2px
    계기판이 붙은 개발용 창은 debug.html 이고 아래 .rig/.body/.rail 배치를 씁니다
    ══════════════════════════════════════════ */
 body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
-          min-height:100vh;min-height:100dvh;}
+          min-height:100vh;min-height:100dvh;
+          /* 손가락으로 끌어도 페이지가 딸려 움직이지 않게 — 주소창이 다시 내려오는 것을 막습니다.
+             (touch-action 은 여기 걸면 안 됩니다 — 수첩·카드 안쪽 스크롤까지 함께 막힙니다.
+              화면 칸과 조이스틱·단추에는 각자 걸어 두었습니다) */
+          overflow:hidden;overscroll-behavior:none;}
 .play .stage{width:min(100vw - 10px, (100vh - 10px) * 16 / 11 + 18px);}
 .play .stage{width:min(100vw - 10px, (100dvh - 10px) * 16 / 11 + 18px);}
 .play .well{border-radius:4px;box-shadow:inset 0 2px 12px rgba(0,0,0,.85);}
+
+/* ══════════════════════════════════════════
+   세로로 든 휴대폰 — 화면을 통째로 눕힙니다
+
+   폰을 돌리지 않아도 가로 화면으로 즐길 수 있게, 웹 쪽에서 90도 돌려 놓습니다.
+   돌린 뒤에는 «가로 폭» 이 곧 화면의 높이(dvh)이므로 vw·vh 를 맞바꿔 셈합니다.
+   손가락이 민 방향도 같이 돌아가므로 main.js 의 turned() 가 되돌려 읽습니다
+   (아래 조건과 글자 하나까지 같아야 합니다).
+   폰이 실제로 가로가 되거나(자동 회전) 전체 화면에서 방향이 잠기면 이 규칙은 저절로 꺼집니다.
+   ══════════════════════════════════════════ */
+@media (orientation:portrait) and (pointer:coarse){
+  body.play{display:block;}
+  .play .stage{
+    position:fixed;top:50%;left:50%;
+    width:min(100dvh - 10px, (100dvw - 10px) * 16 / 11 + 18px);
+    transform:translate(-50%,-50%) rotate(90deg);
+    transform-origin:center center;
+  }
+}
 
 /* 화면 안 단추 줄 — 수첩과 멈춤. 계기판이 없으니 여기가 창구입니다 */
 .hud{position:absolute;top:19px;right:19px;z-index:3;display:flex;gap:5px;}
@@ -66,6 +89,8 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
         color:#DCD6C6;font-family:inherit;font-size:11px;line-height:1;
         touch-action:manipulation;}
 .hud__b--icon{padding:0;width:29px;justify-content:center;font-size:12px;}
+/* 전체 화면 단추 — 손가락 기기에서만 나옵니다 (아래 @media pointer:coarse) */
+.hud__b--full{display:none;}
 /* 눈 붙이기 — 건너뛸 수 있을 때만 나옵니다 (main.js 의 paintRest) */
 .hud__b--rest{display:none;border-color:#8A7A45;background:rgba(52,44,22,.86);color:var(--gold);}
 .hud__b--rest.is-on{display:flex;animation:restIn .2s ease;}
@@ -563,13 +588,32 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
 /* 그림을 끌어다 놓는 동작도 막습니다 (인물 고르기 칸) */
 .well img{-webkit-user-drag:none;}
 
-.pad{display:none;position:absolute;left:16px;bottom:16px;
-     grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:3px;}
-.pad__b{border:none;border-radius:6px;background:rgba(120,140,128,.34);color:#DDE5DE;
-        font-size:15px;display:grid;place-items:center;touch-action:none;
-        -webkit-appearance:none;appearance:none;padding:0;}
-.pad__b::before{content:attr(data-glyph);pointer-events:none;}
-.pad__b:active,.pad__b.is-down{background:rgba(150,200,172,.5);}
+/* ══════════════════════════════════════════
+   조이스틱 — 민 쪽으로 걷고, 바깥 테두리까지 밀면 달립니다.
+   네모 칸(.stick) 전체가 손가락을 받으므로 가장자리를 짚어도 잡힙니다
+   ══════════════════════════════════════════ */
+.stick{display:none;position:absolute;left:calc(14px + env(safe-area-inset-left));
+       bottom:calc(14px + env(safe-area-inset-bottom));
+       width:132px;height:132px;touch-action:none;
+       -webkit-user-select:none;user-select:none;}
+/* 세 겹 모두 칸 한복판에 못박아 둡니다 — 손잡이의 transform 은 JS 몫이라 겹치면 안 됩니다 */
+.stick__ring,.stick__hint,.stick__knob{position:absolute;left:50%;top:50%;border-radius:50%;}
+.stick__ring,.stick__hint{width:104px;height:104px;margin:-52px 0 0 -52px;}
+.stick__ring{border:2px solid rgba(190,210,196,.28);background:rgba(30,38,33,.3);
+             transition:border-color .12s ease, background .12s ease, box-shadow .12s ease;}
+.stick__hint{background:radial-gradient(circle, rgba(190,210,196,.1) 30%, transparent 62%);
+             transition:opacity .12s ease;}
+.stick__knob{width:52px;height:52px;margin:-26px 0 0 -26px;
+             background:rgba(150,178,160,.62);border:1px solid rgba(226,238,229,.5);
+             box-shadow:0 2px 8px rgba(0,0,0,.4);
+             transition:transform .07s ease-out, background .12s ease;}
+.stick.is-on .stick__ring{border-color:rgba(142,205,174,.6);background:rgba(30,44,36,.42);}
+.stick.is-on .stick__knob{background:rgba(142,205,174,.8);transition:transform .02s linear, background .12s ease;}
+.stick.is-on .stick__hint{opacity:0;}
+/* 끝까지 밀었다 — 달리는 중 */
+.stick.is-run .stick__ring{border-color:var(--gold);box-shadow:0 0 12px rgba(242,200,107,.28);}
+.stick.is-run .stick__knob{background:rgba(242,200,107,.85);border-color:#F7D688;}
+
 .pad__a{display:none;position:absolute;right:16px;bottom:30px;width:64px;height:64px;
         border-radius:50%;border:none;background:rgba(120,140,128,.34);color:#DDE5DE;
         font-size:12px;font-family:var(--mono);touch-action:none;
@@ -705,13 +749,18 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
 
 /* 손가락으로 하는 기기 */
 @media (pointer:coarse){
-  .pad{display:grid;}
-  .pad__a{display:grid;}
+  .stick{display:block;}
+  .pad__a{display:grid;width:76px;height:76px;font-size:12.5px;
+          right:calc(14px + env(safe-area-inset-right));
+          bottom:calc(26px + env(safe-area-inset-bottom));}
   .screen__pause{display:grid;}
+  .hud__b--full{display:flex;}       /* 전체 화면 단추는 손가락 기기에만 */
+  .hud__b{height:34px;padding:0 11px;font-size:12px;}
+  .hud__b--icon{width:34px;padding:0;}
   .mod--keys{display:none;}          /* 키보드 안내는 터치 기기에서 쓸 일이 없다 */
-  /* 말을 거는 동안에는 어차피 발이 묶이므로 십자키를 감춥니다.
+  /* 말을 거는 동안에는 어차피 발이 묶이므로 조이스틱을 감춥니다.
      넘기는 단추 하나만 남겨 두고, «SPACE 계속» 은 그 단추를 피해 왼쪽으로 비킵니다 */
-  body.is-talk .pad{display:none;}
+  body.is-talk .stick{display:none;}
   body.is-talk .talk__more{align-self:flex-start;}
 }
 @media (prefers-reduced-motion:reduce){ .plate__dot{animation:none;} .key,.btn{transition:none;} }

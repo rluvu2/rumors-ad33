@@ -156,10 +156,10 @@
       <!-- 십자키 — 글자는 CSS(::before)로 그려 넣습니다.
            단추 안에 진짜 글자가 있으면 휴대폰에서 길게 눌렀을 때 그 글자가 잡히면서
            «복사 · 모두 선택» 상자가 떠 버립니다. 만들어진 글자는 잡히지 않습니다 -->
-      <div class="pad" id="pad" aria-hidden="true">
-        <span></span><button type="button" class="pad__b" data-pad="KeyW" data-glyph="↑"></button><span></span>
-        <button type="button" class="pad__b" data-pad="KeyA" data-glyph="←"></button><span></span><button type="button" class="pad__b" data-pad="KeyD" data-glyph="→"></button>
-        <span></span><button type="button" class="pad__b" data-pad="KeyS" data-glyph="↓"></button><span></span>
+      <div class="stick" id="stick" aria-hidden="true">
+        <i class="stick__ring"></i>
+        <i class="stick__knob" id="stickKnob"></i>
+        <i class="stick__hint"></i>
       </div>
       <button type="button" class="pad__a" data-pad="Space" data-glyph="살펴보기" aria-hidden="true"></button>
       <!-- 터치 기기에는 Esc 가 없으므로 멈춤 단추를 화면에 둔다 -->
