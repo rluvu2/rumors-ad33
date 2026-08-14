@@ -59,8 +59,10 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
              (touch-action 은 여기 걸면 안 됩니다 — 수첩·카드 안쪽 스크롤까지 함께 막힙니다.
               화면 칸과 조이스틱·단추에는 각자 걸어 두었습니다) */
           overflow:hidden;overscroll-behavior:none;}
-.play .stage{width:min(100vw - 10px, (100vh - 10px) * 16 / 11 + 18px);}
-.play .stage{width:min(100vw - 10px, (100dvh - 10px) * 16 / 11 + 18px);}
+/* 크기는 main.js 의 fitView(1-d)가 캔버스에 직접 매깁니다 — 창 비율에 맞춰 시야를 넓히므로
+   비율이 고정이 아니고, CSS 로는 셈할 수 없습니다. 여기서는 감싸는 칸이 그 크기에 딱 붙게만 둡니다 */
+.play .stage{width:max-content;}
+.play canvas{width:auto;height:auto;aspect-ratio:auto;}
 .play .well{border-radius:4px;box-shadow:inset 0 2px 12px rgba(0,0,0,.85);}
 
 /* ══════════════════════════════════════════
@@ -76,7 +78,6 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
   body.play{display:block;}
   .play .stage{
     position:fixed;top:50%;left:50%;
-    width:min(100dvh - 10px, (100dvw - 10px) * 16 / 11 + 18px);
     transform:translate(-50%,-50%) rotate(90deg);
     transform-origin:center center;
   }

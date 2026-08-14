@@ -17,8 +17,13 @@
   const cv = document.getElementById('screen');
   const ctx = cv.getContext('2d');
   ctx.imageSmoothingEnabled = false;
-  const VW = cv.width, VH = cv.height;
   const rd = id => document.getElementById(id);
+
+  /* ── 보이는 범위 — 창에 맞춰 1-d 의 fitView 가 고쳐 씁니다 ──
+     BASE 는 설계 기준입니다. 이보다 좁게는 절대 보이지 않고, 창이 남는 쪽으로만 늘어납니다.
+     MAX 는 가장 좁은 장소(옥상 16×12 = 512×384)를 생각한 한계입니다 */
+  const BASE_W = 512, BASE_H = 352, MAX_W = 960, MAX_H = 384;
+  let VW = BASE_W, VH = BASE_H;
 
   /* 창이 두 가지입니다.
        index.html — 진짜 게임 화면. 화면 칸 하나뿐이고 수첩은 화면 안 단추로 엽니다
@@ -252,6 +257,75 @@
     catch (e) { wake = null; }
   }
   document.addEventListener('visibilitychange', () => { if (!document.hidden && started) keepAwake(); });
+
+  /* ══════════════════════════════════════════
+     1-d. 창에 맞추기 — 남는 자리를 세상으로 채운다
+
+     게임 판을 «키우는» 대신 «더 보여» 줍니다. 인물과 타일의 배율은 창 높이가 정하고
+     (그래서 크기는 예전 그대로), 남는 가로 폭만큼 좌우로 세상이 더 보입니다.
+     넓은 창에서 옆이 검게 비던 자리가 없어집니다.
+     기준(512×352)보다 좁게는 보이지 않게 해 두었으므로, 창이 홀쭉하면 세로가 대신 늘어납니다.
+
+     계기판이 붙은 debug.html 은 오른쪽 칸 때문에 자리를 잴 수 없으므로 기준 크기 그대로 씁니다
+     ══════════════════════════════════════════ */
+  const PLAY = document.body.classList.contains('play');
+  const WELL_PAD = 18;                        // .well 의 테두리 (양쪽 9px) — style.css 와 같아야 합니다
+
+  /* 노치·둥근 모서리에 가려지는 만큼. env() 는 실제로 발라 본 뒤에야 값으로 읽힙니다 */
+  const safeEl = document.createElement('div');
+  safeEl.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;'
+    + 'padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px)'
+    + ' env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';
+  document.body.appendChild(safeEl);
+  function safeInset() {
+    const s = getComputedStyle(safeEl), n = v => parseFloat(v) || 0;
+    // 한복판에 두므로 큰 쪽을 양옆에 똑같이 물립니다
+    return { x: Math.max(n(s.paddingLeft), n(s.paddingRight)) * 2,
+             y: Math.max(n(s.paddingTop), n(s.paddingBottom)) * 2 };
+  }
+
+  function fitView() {
+    if (!PLAY) return;
+    const sa = safeInset();
+    let boxW = innerWidth, boxH = innerHeight;
+    if (turned()) { const t = boxW; boxW = boxH; boxH = t; }   // 90도 눕힌 폰 — 가로세로가 뒤바뀝니다
+    boxW = Math.max(160, boxW - WELL_PAD - sa.x);
+    boxH = Math.max(120, boxH - WELL_PAD - sa.y);
+
+    // 창 비율대로 — 짧은 쪽은 기준을 지키고 남는 쪽만 늘린다.
+    // 짝수로 맞춰야 장소가 화면보다 좁을 때 한복판이 반 칸 어긋나지 않습니다
+    const ar = boxW / boxH, even = v => Math.round(v / 2) * 2;
+    let vw, vh;
+    if (ar >= BASE_W / BASE_H) { vh = BASE_H; vw = Math.min(MAX_W, even(BASE_H * ar)); }
+    else                       { vw = BASE_W; vh = Math.min(MAX_H, even(BASE_W / ar)); }
+
+    if (vw !== VW || vh !== VH) {
+      VW = vw; VH = vh;
+      cv.width = VW; cv.height = VH;                 // 크기를 바꾸면 ctx 설정이 초기화됩니다
+      ctx.imageSmoothingEnabled = false;
+      nightCv.width = VW; nightCv.height = VH;
+      if (W.worlds[mapId]) snapCam();
+    }
+    // 잰 자리에 그대로 앉힌다 — 위 한계(MAX)에 걸렸을 때만 여백이 남습니다
+    const k = Math.min(boxW / VW, boxH / VH);
+    cv.style.width = Math.round(VW * k) + 'px';
+    cv.style.height = Math.round(VH * k) + 'px';
+
+    // 시작 화면·잠시 멈춤 동안에는 루프가 돌지 않으므로 여기서 한 장 그려 둡니다
+    if (started) render(elapsed);
+    else if (loadAt) loadingScreen(loadAt.d, loadAt.t);
+  }
+
+  let fitWait = false;
+  function refit() {
+    if (fitWait) return;
+    fitWait = true;
+    requestAnimationFrame(() => { fitWait = false; fitView(); });
+  }
+  addEventListener('resize', refit);
+  addEventListener('orientationchange', () => setTimeout(refit, 80));   // 폰은 다 돌아간 뒤에야 크기가 맞습니다
+  if (TURNED.addEventListener) TURNED.addEventListener('change', refit);
+  if (window.visualViewport) visualViewport.addEventListener('resize', refit);
 
   /* ══════════════════════════════════════════
      1-b. 수첩 — 오늘 할 일과 소문을 화면 안에서 펼쳐 본다
@@ -749,6 +823,40 @@
     ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
   }
 
+  /* ══════════════════════════════════════════
+     6-d. 판 바깥 — 장소가 화면보다 좁을 때
+
+     창을 꽉 채우다 보면, 좁은 장소(옥상 16×12)에서는 판이 화면을 다 못 메웁니다.
+     그 자리를 테두리 색으로 덮고 안쪽으로 그림자를 드리워, 잘린 것이 아니라
+     «틀» 로 보이게 합니다 — 케이스 테두리(.well)가 그만큼 두꺼워진 것처럼 이어집니다
+     ══════════════════════════════════════════ */
+  const EDGE = '#090C0A', EDGE_SH = 14;
+
+  function edgeShade(x, y, w, h, gx0, gy0, gx1, gy1) {
+    const g = ctx.createLinearGradient(gx0, gy0, gx1, gy1);
+    g.addColorStop(0, 'rgba(4,6,5,.55)');
+    g.addColorStop(1, 'rgba(4,6,5,0)');
+    ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  }
+
+  function drawEdges(w, ox, oy) {
+    const l = Math.max(0, -ox), t = Math.max(0, -oy);
+    const r = Math.max(0, VW - (w.W - ox)), b = Math.max(0, VH - (w.H - oy));
+    if (!(l || t || r || b)) return;                 // 판이 화면을 다 덮었다 — 흔한 쪽입니다
+
+    ctx.fillStyle = EDGE;
+    if (l) ctx.fillRect(0, 0, l, VH);
+    if (r) ctx.fillRect(VW - r, 0, r, VH);
+    if (t) ctx.fillRect(0, 0, VW, t);
+    if (b) ctx.fillRect(0, VH - b, VW, b);
+
+    const s = EDGE_SH;
+    if (l) edgeShade(l, 0, s, VH, l, 0, l + s, 0);
+    if (r) edgeShade(VW - r - s, 0, s, VH, VW - r, 0, VW - r - s, 0);
+    if (t) edgeShade(0, t, VW, s, 0, t, 0, t + s);
+    if (b) edgeShade(0, VH - b - s, VW, s, 0, VH - b, 0, VH - b - s);
+  }
+
   function render(t) {
     const w = world(), ox = Math.round(cam.x), oy = Math.round(cam.y);
     ctx.fillStyle = '#0E1210'; ctx.fillRect(0, 0, VW, VH);
@@ -791,6 +899,7 @@
     }
     drawDusk(t);                                       // 노을
     drawNight(w, ox, oy, t);                           // 밤 — 등불 둘레만 밝다
+    drawEdges(w, ox, oy);                              // 판 바깥 — 좁은 장소의 양옆을 틀로 덮는다
 
     // 머리 위 표시는 사람들을 다 그린 뒤, 어둠보다도 위에 얹는다
     for (const d of draws) if (d.ent) drawTags(d.ent, ox, oy, d.ent === near, t);
@@ -1008,7 +1117,10 @@
   /* ══════════════════════════════════════════
      9. 시작
      ══════════════════════════════════════════ */
+  let loadAt = null;                     // 창 크기가 바뀌면 이 자리에서 다시 그립니다 (1-d 의 fitView)
+
   function loadingScreen(done, total) {
+    loadAt = { d: done, t: total };
     ctx.fillStyle = '#0E1210'; ctx.fillRect(0, 0, VW, VH);
     ctx.fillStyle = '#8ECDAE';
     ctx.font = '600 12px "IBM Plex Sans KR", sans-serif'; ctx.textAlign = 'center';
@@ -1039,5 +1151,6 @@
     Title.markReady();
   }
 
+  fitView();      // 첫 그림을 받기 전에 창부터 재 둡니다 (1-d)
   boot();
 })();
