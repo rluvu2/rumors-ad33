@@ -35,6 +35,14 @@
       key: mapKey + ':' + d.id, id: d.id, map: mapKey, name: d.name, lines: d.lines,
       rumors: d.rumors || [],
       only: d.only || null, off: false,        // only:"day"|"night" — 낮에만·밤에만 나오는 사람
+      who: d.who || null,                      // who:"joel" — 그 사람의 회차에만 나오는 사람
+      say: d.say || null,                      // 주고받는 대사 (요엘의 조우 사다리)
+      meet: d.meet || null,                    // 만나면 요엘의 수첩 몇 번 칸이 채워지나
+      murmur: d.murmur || null,                // 곁을 지나가면 들리는 한 마디 (요엘의 골목)
+      real: d.real || null,                    // 만나고 나면 드러나는 진짜 이름
+      needs: d.needs || null,                  // needs:"branch" — 손에 가지가 있어야 말이 걸린다
+      reveals: d.reveals || null,              // 이 사람을 만나면 저 사람의 이름이 드러난다 (병사 → 빌라도)
+      crowd: !!d.crowd,                        // 박자에 맞춰 «호산나» 를 외치는 무리
       mode: d.mode || 'wander', char: d.char || null, sprite: d.sprite || null,
       x, y, w, h, drawH: sp ? sp.h : 48,
       homeX: x, homeY: y, radius: (d.radius || 3) * TILE, speed: d.speed || 24,

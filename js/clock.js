@@ -59,8 +59,15 @@
   /* ══════════════════════════════════════════
      ② 하루의 시계
      ══════════════════════════════════════════ */
-  const LEN = { day: 360, night: 240 };   // 초 — 낮 6분 + 밤 4분 = 10분
-  const DUSK = 45;                        // 해 지기 몇 초 전부터 노을이 지나
+  /* 하루의 길이는 하루 덩이(js/quest.js 의 PLANS)가 정할 수 있습니다.
+     적지 않으면 아래 기본값 — 낮 6분 + 밤 4분 = 10분입니다.
+
+     요엘의 하루(0번 튜토리얼)는 종려주일 «낮 하루» 라 밤이 없습니다.
+     night: 0 을 주면 해가 지지 않고, dusk: 0 이면 노을도 뜨지 않습니다 —
+     열 시간을 통째로 낮으로 씁니다 */
+  const DEF = { day: 360, night: 240, dusk: 45 };
+  const LEN = { day: DEF.day, night: DEF.night };   // 밖으로 내보내는 칸이라 통째로 갈지 않고 안을 고칩니다
+  let DUSK = DEF.dusk;                    // 해 지기 몇 초 전부터 노을이 지나
   const FADE = 12;                        // 밤이 다 내려앉기까지
 
   const HOURS = ['제3시', '제4시', '제5시', '제6시', '제7시',
@@ -73,8 +80,12 @@
   let run = false;
   let toldDusk = false;
 
-  function begin(n) {
+  /* len — 하루 덩이가 적어 둔 마디 길이 { day, night, dusk }. 없으면 기본값 */
+  function begin(n, len) {
     dn = Math.max(1, n | 0 || 1);
+    LEN.day   = (len && len.day)   || DEF.day;
+    LEN.night = (len && len.night  != null) ? len.night : DEF.night;
+    DUSK      = (len && len.dusk   != null) ? len.dusk  : DEF.dusk;
     t = 0; ph = 'day'; run = true; toldDusk = false;
   }
   const stop = () => { run = false; };
@@ -141,6 +152,7 @@
   }
   /* 노을의 붉기 0~1 — 해 지기 전에 차올랐다가 밤이 되면 식습니다 */
   function warm() {
+    if (!DUSK) return 0;                  // 노을이 없는 하루 (요엘의 종려주일)
     if (ph === 'day') {
       const d = t - (LEN.day - DUSK);
       return d <= 0 ? 0 : Math.min(1, d / DUSK) * 0.85;
@@ -152,7 +164,9 @@
   const isDusk = () => ph === 'day' && left() <= DUSK;
 
   NS.Clock = {
-    WD, START, SPAN, LEN, DUSK, dayOf,
+    WD, START, SPAN, LEN, dayOf, dusk: () => DUSK,
+    /* 밤이 없는 하루인가 — 화면이 «해 질 녘» 을 셈할 때 봅니다 */
+    hasNight: () => LEN.night > 0,
     begin, stop, tick, finish, skip,
     phase, isNight, isOver, isDusk, day, left, leftText, ratio, dayRatio, hourText, dark, warm,
     elapsed: () => t, dayNo: () => dn

@@ -139,6 +139,121 @@
         title: '첫날의 장부를 덮는다',
         say: '오늘은 여기까지. 다음 날들(D-7 금요일부터)은 아직 준비 중입니다.'
       }
+    },
+
+    /* ══════════════════════════════════════════
+       0번 이야기 — 요엘 · 아홉 살 · 종려주일 하루 (튜토리얼)
+
+       니산월 9일. 아사프의 첫날과 같은 날이고, 두 사람은 성문 앞에서 스칩니다.
+       심부름 하나로 조작 여섯 가지를 가르칩니다 —
+         이동·카메라 / 대화 / 채집 / 건네기 / 소문 노출 / 군중 속 이동
+
+       동선은 되돌아오지 않는 한 줄입니다.
+         집 → 골목 → 성문 → 성벽 밖 → 성문 → 골목 → 대로
+
+       만나는 차례가 곧 인물 고르기 화면의 차례입니다(js/joel.js 의 SHEET).
+       거절 → 무시 → 불가 → 받아줌 → 봄 으로 반응이 한 계단씩 좋아집니다.
+       실패할 수 있는 구간은 하나도 없습니다 — 가지를 덜 꺾어도 하루는 그대로 굴러갑니다
+       ══════════════════════════════════════════ */
+    joel: {
+      n: 4,                                  // 4일차 = 니산월 9일 · D-5 · 일요일(종려주일)
+      /* 이 하루에는 밤이 없습니다. 낮 열 분 하나로 끝납니다 (js/clock.js 의 begin) */
+      len: { day: 600, night: 0, dusk: 0 },
+      who: '요엘 · 9 · 하부 도시에 사는 아이',
+      aim: '어머니 심부름 — 종려 가지를 다섯 개 꺾어 오고, 오는 길에 만나는 사람한테 나눠 준다.',
+
+      role: '아홉 살. 직업도 없고 아는 것도 없다.\n'
+          + '오늘 성 안이 왜 이렇게 시끄러운지 모르고, 어른들이 무슨 말을 하는지도 모른다.\n'
+          + '아는 것은 어머니가 시킨 것 하나뿐이다 — 가지 다섯 개.',
+
+      loop: '그래서 오늘 할 일은 대개 «걷고, 말을 걸고, 가지를 건네는 것» 입니다.\n'
+          + '틀릴 수 있는 것이 하나도 없습니다. 가지를 덜 꺾어도, 누가 안 받아 줘도 하루는 그대로 갑니다.',
+
+      /* ── 낮 · 열 분. 기획안 4절의 비트 시트 그대로입니다 ── */
+      day: [
+        { goal:'talkTo', at:'roof', npc:'mother',
+          title:'어머니가 시키는 것을 듣는다',
+          how:'어머니 앞에 서서 SPACE — 넘길 때도 SPACE 입니다',
+          way:'옥상 집. 바로 옆에 서 계신다',
+          say:'가지 다섯 개. 오는 길에 나눠 주기.' },
+
+        { goal:'hear', n:3, at:'lower',
+          title:'골목을 지나며 어른들 말을 듣는다',
+          how:'멈춰 설 것 없습니다 — 사람 곁을 지나가기만 하면 들립니다',
+          way:'옥상에서 계단을 내려가면 하부 도시 골목',
+          say:'무리가 온대. 갈릴리 사람이래. 무슨 소린지 모르겠다.' },
+
+        { goal:'visit', at:'grove',
+          title:'성문을 지나 성 밖으로 나간다',
+          how:'성문 위쪽 문루 앞에서 SPACE — 문 밖이 올리브 뜰입니다',
+          way:'골목 위쪽 끝이 성문, 성문 위쪽이 문루',
+          say:'성 밖은 처음이다.' },
+
+        { goal:'gather', n:5, at:'grove',
+          title:'종려 가지를 다섯 개 꺾는다',
+          how:'나무 앞에 서서 SPACE. 높은 가지 하나는 손이 안 닿습니다 — 돌을 주워 던지세요',
+          way:'성문 밖. 나무는 셋, 아래쪽 왼편에 모여 있습니다',
+          say:'다섯 개. 손에 다 안 잡힌다.' },
+
+        /* ── 돌아오는 길 · 조우 사다리 ──
+           손에 가지가 들어온 뒤에야 열립니다. 건넬 것이 있어야 건네는 장면이 되니까요.
+           거절 → 야단 → 무시 → 불가 → 받아줌 으로 반응이 한 계단씩 좋아집니다 */
+        { goal:'talkTo', at:'gate', npc:'asaph',
+          title:'돌아오는 길 · 짐승 파는 사람',
+          how:'가지를 건네 봅니다 — 앞에 서서 SPACE',
+          way:'성문 안쪽, 좌판을 펴는 사람',
+          say:'바쁘대. 안 받았다.' },
+
+        { goal:'talkTo', at:'gate', npc:'nitssi',
+          title:'문 지키는 사람',
+          how:'앞에 서서 SPACE',
+          way:'성문 한가운데',
+          say:'뛰지 말래. 근데 가지는 받았다.' },
+
+        { goal:'talkTo', at:'gate', npc:'longinus',
+          title:'글씨 쓰는 군인',
+          how:'앞에 서서 SPACE',
+          way:'성문 곁에서 목판에 무언가 적고 있다',
+          say:'나를 안 봤다.' },
+
+        { goal:'talkTo', at:'lower', npc:'pguard',
+          title:'제일 높은 사람',
+          how:'창 든 병사 앞에서 SPACE — 저 뒤에 있는 사람에게는 닿을 수 없습니다',
+          way:'골목 오른쪽 위. 행렬이 지나간다',
+          say:'창 든 사람들이 못 가게 했다.' },
+
+        { goal:'talkTo', at:'lower', npc:'peter',
+          title:'제일 큰 아저씨',
+          how:'앞에 서서 SPACE',
+          way:'골목 한가운데, 덩치 큰 사람',
+          say:'떨어뜨린 가지를 주워 줬다. 같이 흔들자고 했다.' },
+
+        { goal:'visit', at:'market',
+          title:'대로로 나가 앞줄을 잡는다',
+          how:'사람 사이를 비집고 걸어 들어가면 됩니다 — 밀려나도 다시 가면 됩니다',
+          way:'골목 오른쪽 끝이 대로',
+          say:'앞줄. 다 보인다.' },
+
+        { goal:'talkTo', at:'market', npc:'hosanna',
+          title:'옆에 선 노인에게 묻는다',
+          how:'앞에 서서 SPACE — 다들 뭐라고 외치는지 물어봅니다',
+          way:'앞줄에 같이 서 있는 노인',
+          say:'호산나. 구원해 달라는 말이래.' },
+
+        { goal:'shout', n:6, at:'market',
+          title:'박자에 맞춰 «호산나!» 를 외친다',
+          how:'두 고리가 겹치는 순간에 H (휴대폰은 오른쪽 아래 «호산나»)',
+          way:'빗나가면 오르지 않습니다 — 잃는 것도 없으니 박을 기다렸다 한 번 더',
+          say:'지나가면서 나를 봤다. 진짜로 봤다.' }
+      ],
+
+      night: [],                             // 밤이 없는 하루입니다
+
+      dusk: '',
+      end: {
+        title: '니산월 9일 · 종려주일',
+        say: '엄마, 그 사람이 나 봤어.'
+      }
     }
   };
 
@@ -187,12 +302,14 @@
     ph = 'day'; idx = 0; prog = 0; here = mapId || null; sig = '';
     pend = []; now = null; cardT = 0; over = false;
     stat.clear(); purse.coin = 0; purse.games = 0;
+    joelDone = false;
     if (!plan) { hideAll(); return; }
-    if (Clock()) Clock().begin(plan.n);
+    if (Clock()) Clock().begin(plan.n, plan.len);   // len 을 적어 둔 하루는 마디 길이가 다릅니다
     buildList();
     openBrief();
     paint();
   }
+  let joelDone = false;                             // 요엘의 엔딩을 이미 띄웠나
 
   /* ── 브리핑 카드 ── */
   function openBrief() {
@@ -205,9 +322,11 @@
     if (el.bRole) el.bRole.textContent = plan.role || '';
     if (el.bLoop) el.bLoop.textContent = plan.loop || '';
     el.bFirst.textContent = plan.day.length ? plan.day[0].title : '—';
-    if (el.bClock) el.bClock.textContent =
-      '하루는 해가 있는 동안과 해가 진 뒤로 나뉩니다. 오른쪽 위 도넛이 한 바퀴 차면 하루가 끝납니다. '
-      + '해가 지면 낮에 못 한 일은 그대로 닫힙니다.';
+    if (el.bClock) el.bClock.textContent = (plan.len && plan.len.night === 0)
+      ? '오른쪽 위 도넛이 한 바퀴 차면 하루가 끝납니다. 오늘은 해가 지지 않습니다 — '
+        + '틀릴 수 있는 것도, 놓쳐서 닫히는 일도 없습니다.'
+      : '하루는 해가 있는 동안과 해가 진 뒤로 나뉩니다. 오른쪽 위 도넛이 한 바퀴 차면 하루가 끝납니다. '
+        + '해가 지면 낮에 못 한 일은 그대로 닫힙니다.';
     el.brief.classList.add('is-on');
   }
   function closeBrief() {
@@ -258,9 +377,25 @@
     if (pend.length && !busy) openCard(pend.shift());
   }
 
+  /* 이 할 일이 얼마나 찼나. 대개는 prog 가 세지만,
+     소문과 요엘의 하루(가지·들은 말·외침)는 딴 곳에 쌓이므로 그쪽을 읽어 옵니다 */
+  function progOf(s) {
+    const J = NS.Joel;
+    switch (s.goal) {
+      case 'rumor':  return rumors();
+      case 'gather': return J ? J.branches() : 0;      // 꺾은 종려 가지
+      case 'hear':   return J ? J.heardCount() : 0;    // 골목에서 지나가며 들은 말
+      case 'meet':   return J ? J.metCount() : 0;      // 수첩에 오른 사람
+      case 'shout':  return J ? J.shoutCount() : 0;    // «호산나!»
+      default:       return prog;
+    }
+  }
+
   function met(s) {
     if (!s) return false;
     switch (s.goal) {
+      case 'gather': case 'hear': case 'meet': case 'shout':
+        return progOf(s) >= (s.n || 1);
       case 'rumor':  return rumors() >= (s.n || 1);
       /* 이미 그 장소에 서 있으면 «가기» 는 끝난 것으로 봅니다 —
          해가 질 때 마침 그 장소에 있었다면 밖으로 나갔다 올 까닭이 없으니까 */
@@ -278,11 +413,19 @@
     let s = step();
     while (s && met(s)) { finish(s); s = step(); }
     paint();
+    /* 요엘의 하루는 밤도 장부도 없습니다 — 마지막 할 일이 끝나면 그대로 엔딩입니다 */
+    if (!s && !joelDone && NS.Joel && NS.Joel.isRun()) {
+      joelDone = true;
+      pend.push({ kind: 'joelEnd' });
+    }
   }
 
   function finish(s) {
     idx++; prog = 0;
     stat.set(s, 'done');
+    /* 외치는 사이에 그 사람이 지나가며 본다 — 1.5초. 수첩 여섯째 칸이 여기서 찹니다.
+       줌인도 음악 정지도 없습니다. 무게는 나중에 플레이어가 알아서 얹습니다 */
+    if (s.goal === 'shout' && NS.Joel) NS.Joel.look();
     pend.push({ kind: 'done', step: s });      // 카드는 대화가 끝난 뒤 tick 이 띄웁니다
     buildList();                               // «그다음 할 일» 카드는 이걸 닫을 때 이어 붙습니다
   }
@@ -305,6 +448,13 @@
      잠자리에 들어 끝낸 경우도 시곗바늘을 끝으로 옮긴 것이라 같은 길로 들어옵니다 */
   function endDay() {
     if (!plan || over) return;
+    /* 요엘의 하루는 시간이 다 되어도 «놓친 일» 로 닫지 않습니다 — 실패 판정이 없는 하루입니다 */
+    if (NS.Joel && NS.Joel.isRun()) {
+      if (joelDone) return;
+      joelDone = true;
+      pend = [{ kind: 'joelEnd' }];
+      return;
+    }
     over = true;
     if (Clock()) Clock().finish();
     for (const s of list().slice(idx)) stat.set(s, 'miss');   // 밤에 못 한 일은 여기서 닫힌다
@@ -328,6 +478,14 @@
     if (c.kind === 'next') return openNextCard();
     if (c.kind === 'night') return openNightCard(c.missed);
     if (c.kind === 'ledger') return openLedger();
+    /* 요엘의 엔딩 — 장부 대신 수첩을 펼칩니다 (js/joel.js) */
+    if (c.kind === 'joelEnd') {
+      over = true;
+      if (Clock()) Clock().finish();
+      paint();
+      if (NS.Joel) NS.Joel.openEnd();
+      return;
+    }
   }
 
   /* ① 끝냈다 — 끝낸 일과 주인공의 혼잣말만 */
@@ -455,7 +613,7 @@
       way = w.way;
     } else {
       const n = s.n || 1;
-      const cur = s.goal === 'rumor' ? Math.min(rumors(), n) : Math.min(prog, n);
+      const cur = Math.min(progOf(s), n);
       no = `${ph === 'night' ? '밤' : '낮'} 할 일 ${idx + 1}/${L.length}`;
       title = n > 1 ? `${s.title}  (${cur}/${n})` : s.title;
       how = s.how || '';
@@ -582,9 +740,13 @@
 
   /* 지금 «눈을 붙여» 남은 시간을 건너뛸 수 있나 —
      이 마디 할 일을 다 했을 때만입니다. 그래야 건너뛰어도 잃는 것이 없습니다 */
-  const canRest = () => !!plan && !over && !brief && !now && idx >= list().length;
+  /* 요엘의 하루는 열 분이 통째로 낮이라 «눈 붙이기» 가 없습니다 */
+  const canRest = () => !!plan && !(plan.len && plan.len.night === 0)
+                     && !over && !brief && !now && idx >= list().length;
 
   NS.Quest = { init, begin, on, tick, target, paint, earn, nightfall, endDay, canRest, dev,
+               /* 지금 할 일 한 줄 그대로 — 작은 지도(js/minimap.js)가 «어느 장소인가 · 무엇을 하나» 를 읽습니다 */
+               step: () => (brief || over ? null : step()),
                isBrief: () => brief, closeBrief,
                isCard: () => !!now, closeCard,
                busy: () => brief || !!now,          // 이게 참이면 성 안은 잠깐 멈춥니다

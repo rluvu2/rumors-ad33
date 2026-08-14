@@ -126,6 +126,74 @@
       ],
 
       npcs: [
+        /* ══ 요엘의 골목 — 기획안 5절 «골목» ══
+           멈춰 서서 말을 걸 것 없이 «지나가면 들립니다». 소문 수첩도 열리지 않습니다 —
+           시스템이 있다는 사실조차 알려 주지 않는 첫 노출입니다 (murmur, js/main.js 가 띄웁니다) */
+        { id:"gossip1", name:"물동이 인 여인", char:"g30_pilgrim_mother", at:[11, 12], mode:"wander", dir:"down", radius:2, speed:18, who:"joel",
+          murmur:"감람산 쪽에서 무리가 온대.",
+          lines:["감람산 쪽에서 무리가 온다지 뭐예요."] },
+        { id:"gossip2", name:"빵 굽는 아낙", char:"g10_bread_seller", at:[19, 8], mode:"wander", dir:"down", radius:2, speed:16, who:"joel",
+          murmur:"갈릴리 그 사람이래.",
+          lines:["갈릴리에서 왔다는 그 사람이라던데."] },
+        { id:"gossip3", name:"골목 노파", char:"g06_old_woman", at:[23, 13], mode:"idle", dir:"left", speed:14, who:"joel",
+          murmur:"나사로 살렸다는?",
+          lines:["나사로를 살렸다는 그 사람 말이지."] },
+
+        /* ④ 빌라도 — 저 멀리 총독 행렬. «창을 든 열» 이 막아선다.
+             요엘이 가지를 건넬 수 없는 유일한 사람입니다. 4번 이야기의 고립감을 여기서 미리 심습니다.
+
+             셋 다 큰길(7줄) 위에 나란히 둡니다 — 병사 둘이 늘어서고 그 너머에 빌라도가 서 있어야,
+             병사가 «무엇을» 막고 있는지가 한눈에 보입니다.
+             말이 걸리는 것은 앞의 병사뿐이고, 그 장면이 끝나면 뒤에 선 사람의 이름이 드러납니다 */
+        { id:"pilate", name:"제일 높은 사람", real:"본디오 빌라도", char:"b17_pontius_pilate", at:[23, 7], mode:"idle", dir:"left", speed:0, who:"joel",
+          lines:["(멀어서 얼굴이 보이지 않는다)"] },
+        { id:"pguard2", name:"창 든 병사", char:"g22_legionary", at:[21, 8], mode:"idle", dir:"left", speed:0, who:"joel",
+          lines:["…"] },
+        { id:"pguard", name:"창 든 병사", char:"g22_legionary", at:[21, 7], mode:"idle", dir:"left", speed:0,
+          who:"joel", meet:4, needs:"branch", reveals:"pilate",
+          say:[
+            { w:"—",    t:"창을 든 열이 막아선다." },
+            { w:"병사", t:"물러서라." },
+            { w:"요엘", t:"저 사람 누구예요?" },
+            { w:"병사", t:"네가 알 사람 아니다." },
+          ],
+          lines:["물러서라."] },
+
+        /* ⑤ 베드로 — 던진 가지를 주워서 웃으며 함께 흔든다. 사다리에서 처음으로 받아 주는 사람 */
+        { id:"peter", name:"제일 큰 아저씨", real:"시몬 베드로", char:"b05_peter", at:[17, 13], mode:"idle", dir:"down", speed:20,
+          who:"joel", meet:5, needs:"branch",
+          say:[
+            { w:"—",      t:"요엘이 가지를 떨어뜨린다. 큰 남자가 주워 준다." },
+            { w:"베드로", t:"이거 네 거냐?" },
+            { w:"요엘",   t:"네. …아저씨 하나 드릴까요?" },
+            { w:"베드로", t:"같이 흔들자." },
+          ],
+          lines:["같이 흔들자."] },
+
+        /* [선택] 동선 위 배경 사람 셋 — 그냥 지나쳐도 무방합니다. 만나면 수첩 뒷줄에 붙습니다 */
+        { id:"simon", name:"먼 데서 온 아저씨", real:"구레네 시몬", char:"b23_simon_cyrene", at:[8, 13], mode:"wander", dir:"down", radius:2, speed:18,
+          who:"joel", meet:7, needs:"branch",
+          say:[
+            { w:"요엘", t:"아저씨, 짐 무거워요?" },
+            { w:"시몬", t:"구레네에서 걸어왔단다. 이만하면 가볍지." },
+          ],
+          lines:["구레네에서 걸어왔단다."] },
+        { id:"michal", name:"손 없는 아주머니", real:"미갈", char:"g06_old_woman", at:[6, 20], mode:"idle", dir:"right", speed:14,
+          who:"joel", meet:8, needs:"branch",
+          say:[
+            { w:"요엘", t:"아주머니, 가지 하나 드릴까요?" },
+            { w:"—",    t:"두 손이 다 찼다. 요엘이 짐 위에 얹어 준다." },
+          ],
+          lines:["고맙구나."] },
+        { id:"hanan", name:"양 세는 아저씨", real:"하난", char:"g04_shepherd", at:[26, 19], mode:"wander", dir:"down", radius:2, speed:18,
+          who:"joel", meet:9, needs:"branch",
+          say:[
+            { w:"하난", t:"스물셋… 스물셋이 맞는데." },
+            { w:"요엘", t:"스물넷인데요." },
+            { w:"하난", t:"…다시 세 봐야겠구나." },
+          ],
+          lines:["스물셋… 아니 스물넷인가."] },
+
         { id:"woman", name:"물 긷는 여인", char:"g02_housewife", at:[12, 12], mode:"wander", dir:"down", radius:4, speed:24, rumors:["r08", "r04"], only:"day",
           lines:[
             "우물은 성문 밖 올리브 뜰에 있어요.",
@@ -243,6 +311,49 @@
       ],
 
       npcs: [
+        /* ══ 요엘의 대로 — 기획안 5절 «호산나가 무슨 뜻이에요?» ══
+           앞줄에 서서 기다리는 동안 요엘이 «먼저» 말을 겁니다.
+           노인의 «그럼. 외치렴» 에서 외치기가 열립니다 — 뜻을 배우는 것이 곧 조작 해금입니다.
+           침묵 한 번(…글쎄다)은 반드시 있어야 합니다 */
+        { id:"hosanna", name:"옆에 선 노인", char:"g05_old_man", at:[15, 12], mode:"idle", dir:"down", speed:14, who:"joel",
+          say:[
+            { w:"요엘", t:"아저씨, 다들 뭐라고 외치는 거예요?" },
+            { w:"노인", t:"호산나. 구원해 주소서, 라는 뜻이란다." },
+            { w:"요엘", t:"호…산나. 구원이 뭐예요?" },
+            { w:"노인", t:"큰일 났을 때 살려달라고 하는 거지." },
+            { w:"요엘", t:"우리 지금 큰일 났어요?" },
+            { w:"노인", t:"…글쎄다." },
+            { w:"요엘", t:"그럼 나도 외쳐도 돼요?" },
+            { w:"노인", t:"그럼. 외치렴." },
+          ],
+          lines:["외치렴. 목청껏."] },
+
+        /* ⑥ 그 사람 — 대사 없음. 지나가며 본다, 1.5초.
+           줌인도 음악 정지도 없습니다 (기획안 «입성 컷 과장 연출 금지»).
+           이름표는 끝까지 «나귀 탄 사람» 입니다 — 요엘은 이름을 모릅니다 */
+        { id:"jesus", name:"나귀 탄 사람", char:"b01_jesus", at:[6, 8], mode:"patrol", dir:"right", speed:15,
+          path:[[6, 8], [28, 8]], who:"joel",
+          lines:["…"] },
+        { id:"donkeyj", name:"나귀", sprite:"x15_donkey", at:[5, 9], mode:"patrol", dir:"right", speed:15,
+          path:[[5, 9], [27, 9]], who:"joel",
+          lines:["히힝—"] },
+
+        /* ── 대로에 모인 사람들 — 앞줄에 늘어서서 박자에 맞춰 «호산나» 를 외칩니다.
+             crowd 를 단 사람은 js/joel.js 의 박자에 맞춰 머리 위로 한 마디씩 터집니다.
+             요엘이 박자를 맞추면 함께 외친 것으로 칩니다 (js/main.js 의 박자 판) ── */
+        { id:"cr01", name:"환호하는 사람", char:"g29_pilgrim_father",  at:[9, 11],  mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr02", name:"환호하는 사람", char:"g30_pilgrim_mother",  at:[12, 11], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr03", name:"환호하는 아이", char:"g08_boy",             at:[14, 11], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr04", name:"환호하는 사람", char:"g01_laborer",         at:[18, 11], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr05", name:"환호하는 사람", char:"g32_diaspora_pilgrim",at:[21, 11], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr06", name:"환호하는 사람", char:"g06_old_woman",       at:[24, 11], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr07", name:"환호하는 사람", char:"g03_fisherman",       at:[10, 13], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr08", name:"환호하는 아이", char:"g09_girl",            at:[13, 13], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr09", name:"환호하는 사람", char:"g31_traveler",        at:[19, 13], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr10", name:"환호하는 사람", char:"g05_old_man",         at:[22, 13], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr11", name:"환호하는 사람", char:"g07_beggar",          at:[7, 13],  mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+        { id:"cr12", name:"환호하는 사람", char:"g20_levite",          at:[26, 12], mode:"idle", dir:"up", speed:0, who:"joel", crowd:true, lines:["호산나!"] },
+
         { id:"merchant", name:"천 장수", char:"g12_cloth_merchant", at:[8, 14], mode:"wander", dir:"down", radius:2, speed:18, rumors:["r09", "r01"], only:"day",
           lines:[
             "두로에서 온 아마포입니다. 만져 보세요.",
@@ -465,6 +576,45 @@
       ],
 
       npcs: [
+        /* ══ 요엘의 조우 사다리 — 기획안 5절 «돌아오는 길» ══
+           만나는 차례가 곧 캐릭터 고르기 화면의 차례입니다.
+           거절 → 무시 → 불가 → 받아줌 → 봄 으로 반응이 한 계단씩 좋아집니다.
+           meet 는 요엘의 수첩 몇 번 칸이 채워지는가 (js/joel.js 의 SHEET)
+
+           needs:"branch" — 손에 가지가 있어야 말이 걸립니다. 건넬 것이 있어야 건네는 장면이 되니까요.
+           real — 만나고 나면 머리 위 이름표가 «요엘이 붙인 이름» 에서 진짜 이름으로 바뀝니다.
+                  수첩에는 아이가 붙인 이름 그대로 남습니다 (그게 아이가 기억하는 방식이라서)
+
+           ② 닛시 — 야단치면서도 받아 줍니다 */
+        { id:"nitssi", name:"문 지키는 사람", real:"닛시", char:"p2_nitssi", at:[16, 13], mode:"idle", dir:"down", speed:22,
+          who:"joel", meet:2, needs:"branch",
+          say:[
+            { w:"닛시", t:"뛰지 마라, 꼬맹아." },
+            { w:"요엘", t:"아저씨도 하나 가지실래요?" },
+            { w:"닛시", t:"…뛰지 말라니까." },
+          ],
+          lines:["뛰지 말라니까."] },
+
+        /* ① 아사프 — 돌아오는 길 첫 사람. 귀찮아한다 (본편 1번 이야기의 주인공) */
+        { id:"asaph", name:"짐승 파는 사람", real:"아사프", char:"p1_asaph", at:[22, 13], mode:"idle", dir:"left", speed:20,
+          who:"joel", meet:1, needs:"branch",
+          say:[
+            { w:"요엘",   t:"아저씨, 이거 하나 드려요?" },
+            { w:"아사프", t:"얘, 비켜라. 짐승이 놀란다." },
+            { w:"요엘",   t:"…네." },
+          ],
+          lines:["비켜라. 짐승이 놀란다."] },
+
+        /* ③ 롱기누스 — 인파를 세며 목판에 적는다. 요엘을 보지 않는다 */
+        { id:"longinus", name:"글씨 쓰는 군인", real:"롱기누스", char:"p3_longinus", at:[10, 14], mode:"idle", dir:"down", speed:20,
+          who:"joel", meet:3, needs:"branch",
+          say:[
+            { w:"요엘", t:"아저씨, 이거…" },
+            { w:"—",    t:"목판에 숫자를 적는다. 고개를 들지 않는다." },
+            { w:"요엘", t:"…아저씨?" },
+          ],
+          lines:["(목판에 숫자를 적고 있다)"] },
+
         { id:"gatekeep", name:"문지기", char:"g23_centurion", at:[17, 7], mode:"idle", dir:"left", speed:24, rumors:["r02", "r07"],
           lines:[
             "해 지기 전에 돌아오시오.",
@@ -549,9 +699,13 @@
         { a:"n03_fig_tree", c:19, r:7, talk:["잎이 무성한데 열매는 없다."] },
         { a:"n03_fig_tree", c:12, r:4 },
         { a:"n03_fig_tree", c:27, r:20 },
-        { a:"n02_date_palm", c:5, r:18, talk:["대추야자가 높이 매달려 있다."] },
-        { a:"n02_date_palm", c:10, r:19 },
-        { a:"n02_date_palm", c:1, r:20 },
+        /* ── 종려나무 세 그루 — 요엘의 하루에서 가지를 꺾는 나무입니다 (js/joel.js).
+             pick 은 이 나무에서 몇 개나 꺾이는지, high 는 «안 닿는 가지» 입니다.
+             다른 회차에서는 pick 이 그냥 무시되고 여느 나무처럼 살펴보기만 됩니다 ── */
+        { a:"n02_date_palm", c:5, r:18, pick:2, talk:["대추야자가 높이 매달려 있다."] },
+        { a:"n02_date_palm", c:10, r:19, pick:2, talk:["잎이 넓게 늘어진 종려나무다."] },
+        { a:"n02_date_palm", c:1, r:20, pick:1, high:true, talk:["가지가 높다. 손이 안 닿는다."] },
+        { a:"n08_rock_cluster", c:3, r:21, stone:true, talk:["주먹만 한 돌이 굴러 있다."] },
         { a:"n04_cypress", c:30, r:3 },
         { a:"n04_cypress", c:30, r:12 },
         { a:"n09_vine_trellis", c:21, r:11, talk:["포도 시렁 아래가 서늘하다."] },
@@ -665,6 +819,19 @@
       ],
 
       npcs: [
+        /* ── 요엘의 어머니 — 두 줄로 오늘 할 일 둘이 한꺼번에 열립니다 (기획안 5절 «집») ── */
+        { id:"mother", name:"어머니", char:"g02_housewife", at:[6, 8], mode:"idle", dir:"down", speed:16, who:"joel",
+          say:[
+            { w:"어머니", t:"종려나무 가지 좀 꺾어오렴. 다섯 개면 돼." },
+            { w:"어머니", t:"오는 길에 사람들한테도 나눠주고. 오늘은 다들 기분 좋을 게다." },
+            { w:"요엘",   t:"누구한테 줘요?" },
+            { w:"어머니", t:"만나는 사람한테." },
+          ],
+          lines:[
+            "가지는 성 안에 없단다. 성문 밖으로 나가야 해.",
+            "다섯 개면 된다니까.",
+          ] },
+
         { id:"host2", name:"집주인", char:"g21_synagogue_leader", at:[11, 8], mode:"wander", dir:"down", radius:2, speed:16, rumors:["r08", "r10"],
           lines:[
             "유월절이라 옥상까지 손님을 받습니다.",

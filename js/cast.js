@@ -33,12 +33,17 @@
 
   const CAST = [
     {
-      id: 'joel', name: '요엘', role: '아이', age: null, tag: '첫 번째 이야기',
-      sprite: 'p0_joel', start: null,
+      /* 0번 — 관문이 아닙니다. 늘 열려 있고, 몇 번이든 다시 할 수 있습니다.
+         건너뛰어도 본편 이해에 지장이 없어야 합니다 (기획안 2절) */
+      id: 'joel', name: '요엘', role: '아이', age: 9, tag: '처음이신가요? · 약 10분',
+      sprite: 'p0_joel', start: 'roof',
       dist: '군중 속에서 1.5초 눈이 마주침',
       knows: '이름도 모른다',
-      line: SOON, brief: '',
-      span: '준비 중', ready: false
+      line: '아무것도 모르고, 아무것도 잃을 게 없다.',
+      brief: '하부 도시에 사는 아홉 살. 직업도 이해관계도 없는 이 게임 유일의 아이다.\n'
+           + '오늘 어머니가 시킨 것은 하나뿐이다 — 종려 가지 다섯 개를 꺾어 오고, 오는 길에 나눠 줄 것.',
+      span: '니산월 9일 · 종려주일 하루 (약 10분)',
+      ready: true, tutorial: true
     },
     {
       id: 'asaph',

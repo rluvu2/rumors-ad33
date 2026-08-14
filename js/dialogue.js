@@ -33,7 +33,10 @@
   const has = id => learned.includes(id);
 
   let el = null;                            // 화면 요소 묶음
-  const state = { open: false, who: '', lines: [], idx: 0, target: null, door: null, learnAt: -1, learnId: null };
+  const state = { open: false, who: '', me: '', lines: [], idx: 0, target: null, door: null, learnAt: -1, learnId: null };
+
+  /* 주인공의 이름 — 주고받는 대사에서 «내가 말하는 줄» 을 가려내는 데 씁니다 (js/main.js 가 적어 줍니다) */
+  const setMe = name => { state.me = name || ''; };
 
   function init(els) {
     el = els;
@@ -56,11 +59,19 @@
     document.body.classList.add('is-talk');
   }
 
+  /* 한 줄은 글월 하나이거나, 말하는 사람이 붙은 { w:'요엘', t:'…' } 입니다.
+     주고받는 대사(요엘의 조우 사다리)는 줄마다 이름표가 바뀌어야 합니다 */
+  const lineText = l => (l && typeof l === 'object') ? l.t : l;
+  const lineWho  = l => (l && typeof l === 'object' && l.w) ? l.w : null;
+
   function render() {
-    el.text.textContent = state.lines[state.idx];
+    const l = state.lines[state.idx];
+    el.text.textContent = lineText(l);
     const isRumor = state.idx === state.learnAt;
+    const who = lineWho(l) || state.who;
     el.box.classList.toggle('is-rumor', isRumor);
-    el.who.textContent = isRumor ? '소문 · ' + state.who : state.who;
+    el.box.classList.toggle('is-me', lineWho(l) === state.me);   // 주인공이 말하는 줄
+    el.who.textContent = isRumor ? '소문 · ' + who : who;
     const last = state.idx >= state.lines.length - 1;
     el.more.textContent = last ? (state.door ? 'SPACE 들어가기' : 'SPACE 닫기') : 'SPACE 계속';
     if (isRumor && state.learnId) learn(state.learnId);
@@ -86,6 +97,13 @@
      말 걸기 — 고정 대사 뒤에 소문 한 자락
      ══════════════════════════════════════════ */
   function talkTo(npc) {
+    /* say — 주고받는 대사. 요엘의 조우 사다리는 요엘이 먼저 말을 걸므로 줄마다 이름표가 바뀝니다.
+       한 번 주고받은 뒤에는 여느 사람처럼 lines 로 돌아갑니다 */
+    if (npc.say && !npc.said) {
+      npc.said = true;
+      open(npc.name, npc.say.slice(), npc, null, null);
+      return;
+    }
     const lines = npc.lines.slice();
     const fresh = npc.rumors.find(id => RUMORS[id] && !has(id));
     if (fresh) {
@@ -148,8 +166,9 @@
   const learnAll = () => { for (const id in RUMORS) learn(id); };
 
   NS.Dialogue = {
-    RUMORS, learned, init, open, advance, close, talkTo, lookAt, learn, learnAll, hasNews,
+    RUMORS, learned, init, open, advance, close, talkTo, lookAt, learn, learnAll, hasNews, setMe,
     isOpen: () => state.open,
+    target: () => state.target,          // 지금 말을 걸고 있는 사람 (요엘의 수첩이 봅니다)
     count: () => learned.length,
     total: TOTAL
   };

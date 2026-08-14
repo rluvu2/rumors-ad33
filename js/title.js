@@ -180,6 +180,16 @@
       nm.className = 'cast__nm'; nm.textContent = c.ready ? c.role : '???';
       b.appendChild(nm);
 
+      /* 요엘을 해 본 사람에게만 — 아홉 살짜리가 그 사람에게 붙인 이름이 부제로 붙습니다.
+         건너뛴 사람에게는 아무것도 붙지 않고 화면은 여느 때처럼 돕니다 (기획안 5절) */
+      const sub = (NS.Joel && i > 0) ? NS.Joel.subtitleFor(i) : null;
+      if (sub) {
+        const s = document.createElement('small');
+        s.className = 'cast__sub';
+        s.textContent = sub.name;
+        b.appendChild(s);
+      }
+
       // 고른 칸을 한 번 더 누르면 바로 시작합니다
       b.addEventListener('click', () => { if (castSel === i && c.ready) castGo(); else pickCast(i); });
       el.cast.appendChild(b);
@@ -187,6 +197,20 @@
     const on = list.findIndex(c => c.ready);
     castSel = on < 0 ? 0 : on;
     paintCast();
+  }
+
+  /* 요엘의 수첩이 새로 남았을 수 있으므로 칸이 열릴 때마다 부제를 다시 답니다 —
+     요엘의 하루를 막 끝내고 돌아온 «바로 그 화면» 에서 여섯 줄이 보여야 하기 때문입니다 */
+  function refreshSubs() {
+    if (!el.cast || !NS.Joel) return;
+    for (const b of el.cast.children) {
+      const i = +b.dataset.i;
+      const sub = i > 0 ? NS.Joel.subtitleFor(i) : null;
+      let s = b.querySelector('.cast__sub');
+      if (!sub) { if (s) s.remove(); continue; }
+      if (!s) { s = document.createElement('small'); s.className = 'cast__sub'; b.appendChild(s); }
+      s.textContent = sub.name;
+    }
   }
 
   function pickCast(i) {
@@ -205,7 +229,10 @@
     for (const b of el.cast.children) b.classList.toggle('is-on', +b.dataset.i === castSel);
     el.castName.firstChild.nodeValue = c.ready ? c.name : '???';
     el.castRole.textContent = c.ready ? `${c.role} · ${c.age}세 · ${c.tag}` : `${c.tag}`;
-    el.castLine.textContent = c.line || '';
+    /* 요엘의 한 줄이 있으면 그 아이 말을 먼저 얹습니다 — 이 사람을 아이가 어떻게 봤는지 */
+    const sub = (NS.Joel && castSel > 0) ? NS.Joel.subtitleFor(castSel) : null;
+    el.castLine.textContent = sub ? `요엘의 수첩 — ${sub.line}` : (c.line || '');
+    el.castLine.classList.toggle('is-joel', !!sub);
     el.castBrief.textContent = c.brief || '';
     el.castSpan.textContent = c.span || '';
     el.castGo.disabled = !c.ready;
@@ -266,6 +293,7 @@
   function page(name) {
     cur = name;
     for (const k in el.pages) el.pages[k].classList.toggle('is-on', k === name);
+    if (name === 'char') { refreshSubs(); paintCast(); }
   }
 
   const paintSel = () => items.forEach((b, i) => b.classList.toggle('is-sel', i === sel));
@@ -279,7 +307,7 @@
     if (!ready) return;
     if (mode === 'pause') { hide(); hooks.onResume && hooks.onResume(); return; }
     page('char');            // 시작 = 곧바로 게임이 아니라 «누구의 눈으로 볼 것인가»
-    paintCast();
+    refreshSubs(); paintCast();
   }
 
   /* ══════════════════════════════════════════

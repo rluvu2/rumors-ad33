@@ -8,7 +8,8 @@
   'use strict';
   const NS = window.JR;
   const A = NS.Assets, W = NS.World, Actors = NS.Actors, Dlg = NS.Dialogue, Snd = NS.Audio,
-        Title = NS.Title, Cast = NS.Cast, Quest = NS.Quest, Mini = NS.Mini, Clock = NS.Clock;
+        Title = NS.Title, Cast = NS.Cast, Quest = NS.Quest, Mini = NS.Mini, Clock = NS.Clock,
+        Map2 = NS.Minimap, Joel = NS.Joel;
   const TILE = A.TILE;
 
   /* 주인공 기본 그림 — 인물 표(js/cast.js)의 첫 사람. 시작 화면에서 고르면 바뀝니다 */
@@ -34,6 +35,7 @@
   /* ── 판 위의 상태 ── */
   const player = Actors.createPlayer(PLAYER_CHAR);
   let mapId = 'lower', heroImg = null, sheetMode = false, started = false;
+  let castId = null;                    // 지금 누구의 회차인가 (js/cast.js 의 id) — applyPhase 가 봅니다
   const cam = { x: 0, y: 0 };
   let elapsed = 0, portalLock = false, cardT = 0;
   const trans = { phase: 'none', a: 0, dest: null };
@@ -44,13 +46,18 @@
      js/map.js 에서 only:"day" 를 단 사람은 밤에 들어가고, only:"night" 는 밤에만 나옵니다 */
   const live = (w) => (w || world()).npcs.filter(n => !n.off);
 
-  /* 해가 뜨고 지는 순간에 한 번 — 모든 장소의 사람을 낮 몫 · 밤 몫으로 갈아 끼운다 */
+  /* 해가 뜨고 지는 순간에 한 번 — 모든 장소의 사람을 낮 몫 · 밤 몫으로 갈아 끼운다.
+
+     회차도 함께 봅니다. js/map.js 에서 who:"joel" 을 단 사람은 요엘의 하루에만 섭니다 —
+     조우 사다리의 여섯(아사프·닛시·롱기누스·빌라도·베드로·그 사람)이 그렇습니다.
+     아사프의 회차에서는 아사프가 곧 주인공이므로 그 사람들이 성 안을 돌아다니면 안 됩니다 */
   function applyPhase() {
     const night = Clock.isNight();
     let gone = false;
     for (const id in W.worlds)
       for (const n of W.worlds[id].npcs) {
-        const off = n.only ? ((n.only === 'night') !== night) : false;
+        const off = (n.who ? n.who !== castId : false)
+                 || (n.only ? ((n.only === 'night') !== night) : false);
         if (off && !n.off) { n.busy = false; gone = true; }
         n.off = off;
       }
@@ -72,6 +79,7 @@
     Snd.unlock();
     if (k === 'Escape') { if (!escDown) { escDown = true; onEscape(); } return; }
     if (Title.isOpen()) return;                 // 시작 화면이 떠 있는 동안은 게임이 입력을 안 받는다
+    if (Joel.isEnd()) { if (k === 'Space') Joel.closeEnd(); return; }   // 요엘의 엔딩
     if (Mini.isOpen()) { Mini.key(k); return; } // 작은 판이 열려 있으면 열쇠를 그쪽에 넘긴다
     // 브리핑·완료 카드를 보는 동안도 마찬가지 — SPACE 한 번이면 카드를 닫고 이어 갑니다
     if (Quest.isBrief()) { if (k === 'Space') Quest.closeBrief(); return; }
@@ -83,6 +91,8 @@
     if (k === 'Space') onAction();
     if (k === 'KeyT') openBook('tasks');       // 오늘 할 일
     if (k === 'KeyN') openBook('notes');       // 소문 수첩
+    if (k === 'KeyM') Map2.toggle();           // 작은 지도 켜고 끄기
+    if (k === 'KeyH') doShout();               // 호산나! — 뜻을 배운 뒤에만 열립니다
     if (k === 'KeyR') startNap();              // 눈 붙이기 — 할 일을 다 했을 때만 열립니다
     if (k === 'KeyG') {                        // 규격 표시 한 번에 켜고 끄기
       const on = !(show.foot && show.door && show.sprite && show.base);
@@ -131,7 +141,8 @@
     if (turned()) { const t = dx; dx = dy; dy = -t; }      // 돌려 놓은 만큼 되돌린다
     const d = Math.hypot(dx, dy);
     if (d < 0.001) { stick.ax = stick.ay = stick.mag = 0; return paintStick(0, 0); }
-    const m = Math.min(1, d / STICK.r);
+    // 손가락 자리는 진짜 화면 픽셀이고 STICK.r 은 zoom 하기 전 값이라, 배율만큼 곱해서 견줍니다
+    const m = Math.min(1, d / (STICK.r * uiK));
     stick.ax = dx / d; stick.ay = dy / d; stick.mag = m;
     paintStick(stick.ax * m * STICK.r, stick.ay * m * STICK.r);
   }
@@ -284,20 +295,41 @@
              y: Math.max(n(s.paddingTop), n(s.paddingBottom)) * 2 };
   }
 
+  /* ── 글씨·알림창 크기 — 화면이 커진 만큼 UI 도 함께 커집니다 ──
+     화면 칸이 기준(512×352)의 몇 배로 늘어났는지가 k 입니다.
+     그 배를 그대로 UI 에 바르면 글자가 너무 굵어지므로 절반쯤만 따라가게 합니다.
+     배율은 style.css 의 --ui 로 넘기고, 그쪽에서 .well 을 통째로 zoom 합니다
+     (그 안의 «할 일» 띠 · 시계 · 지도 · 대사창 · 카드가 한꺼번에 커집니다).
+     zoom 을 모르는 브라우저에서는 1 로 두어 예전 크기 그대로 둡니다 */
+  const UI_MAX = 2.4, UI_FOLLOW = 0.45;
+  const CAN_ZOOM = !!(window.CSS && CSS.supports && CSS.supports('zoom', '2'));
+  let uiK = 1;
+  const uiOf = k => CAN_ZOOM
+    ? Math.round(Math.min(UI_MAX, Math.max(1, 1 + (k - 1) * UI_FOLLOW)) * 100) / 100
+    : 1;
+
   function fitView() {
     if (!PLAY) return;
     const sa = safeInset();
-    let boxW = innerWidth, boxH = innerHeight;
-    if (turned()) { const t = boxW; boxW = boxH; boxH = t; }   // 90도 눕힌 폰 — 가로세로가 뒤바뀝니다
-    boxW = Math.max(160, boxW - WELL_PAD - sa.x);
-    boxH = Math.max(120, boxH - WELL_PAD - sa.y);
+    let winW = innerWidth, winH = innerHeight;
+    if (turned()) { const t = winW; winW = winH; winH = t; }   // 90도 눕힌 폰 — 가로세로가 뒤바뀝니다
 
-    // 창 비율대로 — 짧은 쪽은 기준을 지키고 남는 쪽만 늘린다.
-    // 짝수로 맞춰야 장소가 화면보다 좁을 때 한복판이 반 칸 어긋나지 않습니다
-    const ar = boxW / boxH, even = v => Math.round(v / 2) * 2;
-    let vw, vh;
-    if (ar >= BASE_W / BASE_H) { vh = BASE_H; vw = Math.min(MAX_W, even(BASE_H * ar)); }
-    else                       { vw = BASE_W; vh = Math.min(MAX_H, even(BASE_W / ar)); }
+    // 테두리(.well 의 여백)도 zoom 을 따라 굵어지므로 배율을 어림잡고 한 번 더 잽니다.
+    // 두 번이면 충분합니다 — 테두리 몇 픽셀 차이라 그다음부터는 값이 움직이지 않습니다
+    let ui = uiK, boxW = 0, boxH = 0, k = 1, vw = VW, vh = VH;
+    for (let pass = 0; pass < 2; pass++) {
+      boxW = Math.max(160, winW - WELL_PAD * ui - sa.x);
+      boxH = Math.max(120, winH - WELL_PAD * ui - sa.y);
+
+      // 창 비율대로 — 짧은 쪽은 기준을 지키고 남는 쪽만 늘린다.
+      // 짝수로 맞춰야 장소가 화면보다 좁을 때 한복판이 반 칸 어긋나지 않습니다
+      const ar = boxW / boxH, even = v => Math.round(v / 2) * 2;
+      if (ar >= BASE_W / BASE_H) { vh = BASE_H; vw = Math.min(MAX_W, even(BASE_H * ar)); }
+      else                       { vw = BASE_W; vh = Math.min(MAX_H, even(BASE_W / ar)); }
+
+      k = Math.min(boxW / vw, boxH / vh);
+      ui = uiOf(k);
+    }
 
     if (vw !== VW || vh !== VH) {
       VW = vw; VH = vh;
@@ -306,10 +338,13 @@
       nightCv.width = VW; nightCv.height = VH;
       if (W.worlds[mapId]) snapCam();
     }
-    // 잰 자리에 그대로 앉힌다 — 위 한계(MAX)에 걸렸을 때만 여백이 남습니다
-    const k = Math.min(boxW / VW, boxH / VH);
-    cv.style.width = Math.round(VW * k) + 'px';
-    cv.style.height = Math.round(VH * k) + 'px';
+
+    // 잰 자리에 그대로 앉힌다 — 위 한계(MAX)에 걸렸을 때만 여백이 남습니다.
+    // zoom 이 다시 곱해 주므로 여기서는 배율만큼 미리 나눠 둡니다
+    uiK = ui;
+    document.documentElement.style.setProperty('--ui', ui);
+    cv.style.width = Math.round(VW * k / ui) + 'px';
+    cv.style.height = Math.round(VH * k / ui) + 'px';
 
     // 시작 화면·잠시 멈춤 동안에는 루프가 돌지 않으므로 여기서 한 장 그려 둡니다
     if (started) render(elapsed);
@@ -360,6 +395,8 @@
     rd('btnTasks').addEventListener('click', () => openBook('tasks'));
     rd('btnNotes').addEventListener('click', () => openBook('notes'));
   }
+  const btnMap = rd('btnMap');
+  if (btnMap) btnMap.addEventListener('click', () => { Map2.toggle(); cv.focus(); });
 
   /* ══════════════════════════════════════════
      2. 눈앞의 것 집어내기
@@ -388,13 +425,26 @@
   function onAction() {
     if (trans.phase !== 'none') return;
     if (Dlg.isOpen()) {
+      const who = Dlg.target();
       const door = Dlg.advance();
       Quest.on('advance');                       // 소문은 대사를 넘기는 사이에 늘어난다
+      if (!Dlg.isOpen() && who) {                // 방금 대화가 끝났다
+        Joel.meetNpc(who);                       // 요엘의 수첩 — 만나기만 하면 채워집니다
+        // 뜻을 배우는 것이 곧 조작 해금입니다 (기획안 5절 «호산나가 무슨 뜻이에요?»)
+        if (who.id === 'hosanna' && Joel.learnWord()) Snd.play('quest', 0.6);
+      }
       if (door) enterDoor(door);
       return;
     }
     const n = nearbyNpc();
     if (n) {
+      /* 아직 손이 빈 요엘 — 건넬 것이 있어야 건네는 장면이 됩니다.
+         가지를 꺾어 오기 전에는 조우가 열리지 않습니다 (js/map.js 의 needs) */
+      if (n.needs === 'branch' && Joel.isRun() && Joel.branches() <= 0) {
+        Dlg.lookAt('요엘', ['아직 드릴 게 없다.', '종려 가지부터 꺾어 와야지.'], null);
+        stickOff();
+        return;
+      }
       n.busy = true;
       const dx = player.x - n.x, dy = player.y - n.y;
       if (Math.abs(dx) > Math.abs(dy)) n.dir = dx > 0 ? 'right' : 'left';
@@ -408,6 +458,16 @@
     const o = facingObj();
     if (o) {
       if (o.game && Mini.has(o.game)) { openMini(o.game); return; }   // 좌판의 작은 판
+      // 요엘의 종려 가지 · 돌 — 꺾거나 줍습니다 (js/joel.js)
+      if (Joel.canPick(o)) {
+        const r = Joel.pick(o);
+        if (r) {
+          Snd.play(r.got ? 'quest' : 'talk', 0.55);
+          Dlg.lookAt(r.who, r.lines, null);
+          stickOff();
+          return;
+        }
+      }
       const a = A.ATLAS[o.a];
       Dlg.lookAt(a.name, o.talk || [a.note || '…'], o.to ? o : null);
       stickOff();
@@ -466,6 +526,110 @@
     if (on && restLab) restLab.textContent = Clock.isNight() ? '잠자리' : '눈 붙이기';
   }
 
+  /* ══════════════════════════════════════════
+     3-c. 요엘의 골목 — 지나가면 들린다
+
+     멈춰 서서 말을 걸 것도, 대사창이 열릴 것도 없습니다.
+     곁을 지나가면 그 사람 머리 위로 한 마디가 잠깐 떴다 사라집니다.
+     소문 수첩도 열리지 않습니다 — 시스템이 있다는 사실조차 알려 주지 않는 첫 노출입니다
+     ══════════════════════════════════════════ */
+  const MURMUR_NEAR = 62, MURMUR_HOLD = 3.4;
+  const murmurs = new Map();                   // 사람 → 남은 시간(초)
+
+  function hearAround(npcs, dt) {
+    for (const [n, t] of murmurs) {
+      const left = t - dt;
+      if (left <= 0) murmurs.delete(n); else murmurs.set(n, left);
+    }
+    if (!Joel.isRun()) return;
+    for (const n of npcs) {
+      if (!n.murmur || murmurs.has(n)) continue;
+      if (distTo(n) > MURMUR_NEAR) continue;
+      if (Joel.overhear(n)) { murmurs.set(n, MURMUR_HOLD); Snd.play('talk', 0.35); }
+    }
+  }
+
+  /* 머리 위로 떠오르는 한 마디 — 이름표보다 한 줄 더 위.
+     골목의 소문은 흐린 글씨, 대로의 «호산나!» 는 금빛으로 터집니다 */
+  function drawMurmur(e, ox, oy, text, a, gold) {
+    ctx.font = '600 9px "IBM Plex Sans KR", sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const cx = e.x - ox + e.w / 2, by = headTop(e) - oy - 30;
+    const w = Math.ceil(ctx.measureText(text).width) + 12;
+    ctx.globalAlpha = a;
+    ctx.fillStyle = gold ? 'rgba(44,32,10,.9)' : 'rgba(10,14,11,.88)';
+    ctx.fillRect(Math.round(cx - w / 2), Math.round(by), w, 13);
+    ctx.fillStyle = gold ? '#F2C86B' : '#C9D2C6';
+    ctx.fillText(text, Math.round(cx), Math.round(by) + 7);
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  }
+
+  /* ══════════════════════════════════════════
+     박자 판 — 대로에서 함께 외치기
+
+     한 박마다 바깥 고리가 안쪽 고리로 오므라듭니다. 두 고리가 겹칠 때 누르면 «함께 외친» 것입니다.
+     빗나가도 잃는 것은 없습니다 — 세 번 빗나가면 군중이 한 번 메워 줍니다.
+     아래 칸은 몇 번이나 함께 외쳤는지입니다
+     ══════════════════════════════════════════ */
+  function drawBeat() {
+    if (!Joel.isRun() || !Joel.beatOn() || !Joel.canShout() || Dlg.isOpen() || Joel.isEnd()) return;
+    const cx = Math.round(VW / 2), cy = VH - 50;
+    const p = Joel.beatPhase(), glow = Joel.hitGlow(), bad = Joel.missGlow();
+    const need = NS.Joel.SHOUT, got = Math.min(need, Joel.shoutCount());
+    const ringY = cy - 10;                             // 고리는 위쪽, 글씨와 칸은 아래쪽
+
+    ctx.fillStyle = 'rgba(10,14,11,.78)';
+    ctx.fillRect(cx - 74, cy - 30, 148, 54);
+    ctx.strokeStyle = bad > 0 ? '#C8735F' : glow > 0 ? '#F2C86B' : '#4E5C53';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(cx - 73.5, cy - 29.5, 147, 53);
+
+    // 안쪽 고리 — 여기에 맞춰 누릅니다
+    ctx.beginPath(); ctx.arc(cx, ringY, 7, 0, 6.2832);
+    ctx.strokeStyle = '#8ECDAE'; ctx.lineWidth = 1.5; ctx.stroke();
+    // 바깥 고리 — 한 박에 걸쳐 오므라듭니다. 두 고리가 겹치는 순간이 박입니다
+    ctx.beginPath(); ctx.arc(cx, ringY, 7 + (1 - p) * 10, 0, 6.2832);
+    ctx.strokeStyle = `rgba(242,200,107,${0.32 + p * 0.58})`; ctx.lineWidth = 1.5; ctx.stroke();
+    // 맞췄을 때 한 번 차오르고, 빗나가면 붉게 한 번 흔들린다
+    if (glow > 0) {
+      ctx.beginPath(); ctx.arc(cx, ringY, 6, 0, 6.2832);
+      ctx.fillStyle = `rgba(242,200,107,${Math.min(1, glow * 3)})`; ctx.fill();
+    } else if (bad > 0) {
+      ctx.beginPath(); ctx.arc(cx, ringY, 6, 0, 6.2832);
+      ctx.fillStyle = `rgba(200,115,95,${Math.min(1, bad * 2.4)})`; ctx.fill();
+    }
+
+    ctx.font = '600 8px "IBM Plex Sans KR", sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const c = Joel.combo();
+    // 빗나갔을 때는 «다시» 를 먼저 보여 줍니다 — 잃는 것은 없고 박만 기다리면 됩니다
+    if (bad > 0)      { ctx.fillStyle = '#E0A08C'; ctx.fillText('빗나갔다 — 박을 기다렸다 다시', cx, cy + 8); }
+    else if (c >= 2)  { ctx.fillStyle = '#F2C86B'; ctx.fillText(`함께 ${c}번째!`, cx, cy + 8); }
+    else              { ctx.fillStyle = '#93A197'; ctx.fillText('두 고리가 겹칠 때', cx, cy + 8); }
+
+    // 몇 번이나 함께 외쳤나
+    for (let i = 0; i < need; i++) {
+      ctx.fillStyle = i < got ? '#F2C86B' : '#3E4A42';
+      ctx.fillRect(cx - need * 5 + i * 10, cy + 17, 7, 3);
+    }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  }
+
+  /* 호산나! — 뜻을 배운 뒤에만 열립니다.
+     박에 맞으면 화면이 크게 밝아지고, 빗나가도 군중이 메워 줍니다 (틀릴 수 있는 것이 없습니다) */
+  function doShout() {
+    if (!Joel.canShout() || Dlg.isOpen() || Quest.busy() || Mini.isOpen() || bookOn) return;
+    const r = Joel.shout();
+    if (!r) return;
+    Snd.play('quest', r === 'hit' ? 0.6 : 0.3);
+    shoutT = r === 'hit' ? 0.48 : 0.2;
+    shoutHit = r === 'hit';
+  }
+  let shoutT = 0, shoutHit = false;
+  const btnShout = rd('btnShout');
+  if (btnShout) btnShout.addEventListener('click', () => { doShout(); cv.focus(); });
+
   /* 작은 판을 연다 — 판이 도는 동안 성 안은 멈추고 열쇠는 그쪽이 받는다 */
   function openMini(name) {
     held.clear(); padClear(); paintCaps();
@@ -499,6 +663,7 @@
     for (const n of world().npcs) n.busy = false;
     Snd.playBgm(mapId);
     updateJump(); snapCam();
+    Map2.onTravel(world());               // 작은 지도의 장소 이름과 길 안내를 갈아 끼운다
     Quest.on('visit', mapId);
   }
   function jumpTo(id) {
@@ -515,21 +680,28 @@
     if (started) return;
     started = true;
     Snd.unlock();
+    castId = who ? who.id : null;
     if (who && who.sprite && A.CHARS[who.sprite]) { player.char = who.sprite; applied.hero = who.sprite; }
     if (who && who.name) player.name = who.name;   // 이름표는 빌려 쓴 그림이 아니라 고른 사람 이름으로
+    Dlg.setMe(player.name);                        // 주고받는 대사에서 «내가 말하는 줄» 을 가려냅니다
+    Joel.begin(castId);                            // 요엘의 회차면 가지·수첩을 새로 깝니다
     const first = (who && who.start && W.MAPS[who.start]) ? who.start : 'lower';
     travel(first, W.MAPS[first].spawn, 'down');
     Quest.begin(who ? who.id : null, first);     // 오늘 할 일을 깔고 브리핑 카드를 띄운다
     applyPhase();                                // 낮 몫 사람들을 세운다
     if (clockEl.root) clockEl.root.classList.add('is-on');
+    Map2.show(true);                             // 작은 지도는 게임이 시작된 뒤부터 뜹니다
     paintClock();
     // 시작 단추를 누른 «그 손짓» 안에서만 전체 화면을 얻을 수 있습니다
     if (touch()) { goFull(); keepAwake(); }
     cardT = 1.8;
     cv.focus();
+    // 요엘의 하루를 끝내고 인물 고르기로 돌아왔다가 다시 시작할 수 있으므로,
+    // 루프는 딱 한 번만 겁니다 — 두 번 걸면 성 안이 두 배로 빨라집니다
     last = performance.now();
-    requestAnimationFrame(frame);
+    if (!loopOn) { loopOn = true; requestAnimationFrame(frame); }
   }
+  let loopOn = false;
   function pause() {
     if (!started || Title.isOpen()) return;
     held.clear(); paintCaps();
@@ -598,7 +770,7 @@
     // 대사창·장소 이동·브리핑·완료 카드·작은 판·수첩이 떠 있는 동안은 발이 묶인다
     napTick(dt);
     const free = !Dlg.isOpen() && trans.phase === 'none' && !Quest.busy() && !Mini.isOpen()
-                 && !bookOn && !nap.on;
+                 && !bookOn && !nap.on && !Joel.isEnd();
     const onStick = free && stick.mag > STICK.dead;      // 가운데 언저리는 멈춤으로 친다
     const input = {
       left:  free && held.has('KeyA'), right: free && held.has('KeyD'),
@@ -611,6 +783,18 @@
 
     const all = [player, ...npcs];
     for (const n of npcs) Actors.updateNpc(w, n, dt, all);
+    hearAround(npcs, dt);                      // 골목에서 지나가며 들리는 말 (요엘)
+    if (shoutT > 0) shoutT -= dt;
+
+    /* 대로의 박자 — 모인 사람들이 한 박씩 «호산나!» 를 함께 터뜨립니다.
+       요엘이 대로에 서 있는 동안만 돕니다 */
+    if (Joel.isRun()) {
+      Joel.applyReveal(npcs);                  // 만난 사람의 이름표를 진짜 이름으로
+      const crowd = npcs.filter(n => n.crowd);
+      if (crowd.length) Joel.startBeat(); else Joel.stopBeat();
+      if (Joel.beatTick(dt))                   // 박이 넘어갔다 — 무리가 함께 외친다
+        for (const c of crowd) murmurs.set(c, 0.62);
+    }
     if (trans.phase === 'none') checkPortal();
     snapCam();
   }
@@ -904,6 +1088,17 @@
     // 머리 위 표시는 사람들을 다 그린 뒤, 어둠보다도 위에 얹는다
     for (const d of draws) if (d.ent) drawTags(d.ent, ox, oy, d.ent === near, t);
 
+    // 지나가며 들린 말 · 무리의 «호산나!» — 대사창을 열지 않고 머리 위에 잠깐 떴다 사라집니다
+    for (const [n, left] of murmurs)
+      if (!n.off) drawMurmur(n, ox, oy, n.murmur || '호산나!', Math.min(1, left / 0.5), !n.murmur);
+
+    // 외칠 때마다 화면이 한 번 밝아집니다 — 박에 맞으면 크게, 빗나가면 살짝
+    if (shoutT > 0) {
+      ctx.fillStyle = `rgba(242,200,107,${Math.max(0, shoutT) * (shoutHit ? 0.3 : 0.1)})`;
+      ctx.fillRect(0, 0, VW, VH);
+    }
+    drawBeat();                                        // 대로의 박자 판
+
     // 지금 찾아가야 할 사람·물건 — 이름표가 옅어져도 표지가 남고,
     // 화면 밖에 있으면 가장자리에 방향 화살표가 선다
     const tg = Quest.target();
@@ -926,6 +1121,9 @@
     }
 
     drawSpecOverlay(w, ox, oy);
+
+    // 오른쪽 위 작은 지도 — 캔버스 밖 칸이므로 그리는 차례와는 상관없습니다
+    Map2.paint(w, player, t);
 
     // 장소 이름표 — 화면 왼쪽 위 «할 일» 띠와 겹치지 않게 아래쪽 가운데에 둔다
     if (cardT > 0) {
@@ -1138,6 +1336,19 @@
     });
     Mini.init();
     Quest.init();
+    Map2.init({ root: rd('mmap'), cv: rd('mmapCv'), where: rd('mmapWhere'),
+                go: rd('mmapGo'), act: rd('mmapAct'), btn: rd('btnMap') });
+    Joel.init({ book: rd('book'), tab: document.querySelector('.book__tab--met'),
+                sheet: rd('metList'), count: rd('metCount'), shout: rd('btnShout'),
+                end: rd('joelEnd'), endSay: rd('joelSay'), endSheet: rd('joelSheet'),
+                endWord: rd('joelWord'), endGo: rd('joelGo') });
+    /* 수첩을 덮으면 인물 고르기 화면으로 — 여섯 칸이 그대로 그 화면이 됩니다.
+       한 박자 뒤에 여는 이유: 카드를 넘기던 손가락이 SPACE 를 한 번 더 누르면
+       그 길로 다음 회차가 곧장 시작돼 버립니다 (인물 고르기에서 SPACE 는 «이 사람으로 시작») */
+    Joel.onEnd(() => {
+      started = false;
+      setTimeout(() => { Title.show('main'); Title.page('char'); }, 280);
+    });
     Title.init({ onStart: start, onResume: resume, apply: applyOptions });
     W.buildAll();
 

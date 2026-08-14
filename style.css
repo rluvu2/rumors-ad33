@@ -11,6 +11,9 @@
   /* 시작 화면 차림표용 도트 글꼴. 한글은 없으므로 영문 항목에만 씁니다 */
   --pixel:'Press Start 2P', 'IBM Plex Mono', ui-monospace, monospace;
   --gold:#F2C86B; --parch:#EDE4CC;
+  /* 화면 칸이 커진 만큼 UI 도 함께 키우는 배율. main.js 의 fitView(1-d)가 고쳐 씁니다.
+     여기 적힌 1 은 «키우지 않음» — 작은 화면과, zoom 을 모르는 브라우저의 몫입니다 */
+  --ui:1;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -63,7 +66,18 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
    비율이 고정이 아니고, CSS 로는 셈할 수 없습니다. 여기서는 감싸는 칸이 그 크기에 딱 붙게만 둡니다 */
 .play .stage{width:max-content;}
 .play canvas{width:auto;height:auto;aspect-ratio:auto;}
-.play .well{border-radius:4px;box-shadow:inset 0 2px 12px rgba(0,0,0,.85);}
+
+/* ── 큰 화면에서는 UI 도 함께 커집니다 ──
+   글씨 하나하나에 배율을 바르는 대신, 화면 칸(.well)을 통째로 zoom 합니다.
+   그러면 그 안의 모든 것 — «할 일» 띠 · 시계 · 지도 · 대사창 · 카드 · 수첩 — 이
+   여백과 테두리까지 같은 비율로 커지므로, 배치가 어긋날 자리가 없습니다.
+   백분율(대사창 높이 46% 따위)도 전부 이 안에서 셈해지므로 셈이 꼬이지 않습니다.
+
+   화면 칸 자체는 커지면 안 되므로(그러면 창을 넘습니다) main.js 가 캔버스에 매기는
+   크기를 이 배율로 미리 나눠 둡니다 — 나눈 뒤 zoom 으로 곱해지니 제자리입니다.
+   배율은 «화면이 몇 배로 커졌나» 를 절반쯤 따라갑니다. 그대로 따라가면 글자가 너무 굵어집니다 */
+.play .well{border-radius:4px;box-shadow:inset 0 2px 12px rgba(0,0,0,.85);
+            zoom:var(--ui);}
 
 /* ══════════════════════════════════════════
    세로로 든 휴대폰 — 화면을 통째로 눕힙니다
@@ -290,6 +304,103 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
 .clock.is-over .clock__hour{color:#8A948B;}
 @keyframes clockTick{0%,100%{opacity:1}50%{opacity:.4}}
 @media (prefers-reduced-motion:reduce){ .clock.is-dusk .clock__ico{animation:none;} }
+
+/* ══════════════════════════════════════════
+   작은 지도 — 시계 바로 아래. 내용은 js/minimap.js 가 채웁니다
+
+   지도 그림은 캔버스 한 장이고, 큰 화면에서는 그대로 늘어납니다.
+   흐려지지 않게 image-rendering:pixelated 로 «점을 키우는» 쪽을 골랐습니다 —
+   게임 화면과 같은 결이라 오히려 어울립니다. 글씨는 캔버스 밖 글자 칸이라 늘 또렷합니다
+   ══════════════════════════════════════════ */
+.mmap{position:absolute;right:19px;top:92px;z-index:3;width:136px;
+      display:none;pointer-events:none;
+      background:rgba(10,14,11,.84);border:1px solid #3E4A42;border-radius:3px;
+      padding:6px 7px 7px;}
+.mmap.is-on{display:block;}
+.mmap__top{display:flex;align-items:baseline;gap:6px;margin-bottom:5px;}
+.mmap__where{font-size:10px;font-weight:600;line-height:1.2;color:var(--parch);}
+.mmap__key{margin-left:auto;flex:none;font-family:var(--mono);font-size:8px;color:var(--data-dim);
+           border:1px solid #3E4A42;border-radius:2px;padding:0 3px;}
+.mmap__cv{display:block;width:120px;height:88px;margin:0 auto;border-radius:2px;
+          background:#090D0B;image-rendering:pixelated;image-rendering:crisp-edges;}
+/* «→ 어디로» — 다른 장소에 할 일이 있으면 그리로 가는 길목이 지도에서 금색으로 켜집니다 */
+.mmap__go{margin-top:5px;font-size:9.5px;font-weight:600;line-height:1.35;color:var(--gold);}
+/* «무엇을» — 닿았을 때 눌러야 하는 것 */
+.mmap__act{margin-top:3px;font-size:9px;line-height:1.4;color:#93A197;}
+.mmap__go:empty,.mmap__act:empty{display:none;}
+.mmap__leg{display:flex;flex-wrap:wrap;gap:3px 7px;margin-top:6px;
+           font-family:var(--mono);font-size:7.5px;color:#6E7A72;}
+.mmap__l{display:flex;align-items:center;gap:3px;}
+.mmap__l::before{content:'';width:5px;height:5px;border-radius:1px;}
+.mmap__l--me::before{background:#F2F5EF;}
+.mmap__l--goal::before{background:var(--gold);transform:rotate(45deg);}
+.mmap__l--exit::before{background:var(--data);}
+.mmap__l--news::before{background:#E3C273;border-radius:50%;}
+/* 밤에는 지도도 등불 빛으로 — 시계·«할 일» 띠와 같은 색을 씁니다 */
+.mmap.is-night{border-color:#5A6E96;background:rgba(9,13,26,.86);}
+.mmap.is-night .mmap__cv{background:#0A0E18;}
+/* 지도를 껐을 때 오른쪽 위 단추를 흐리게 — 꺼 둔 것이지 고장 난 것이 아님을 보이게 */
+.hud__b.is-off{opacity:.5;}
+
+/* ══════════════════════════════════════════
+   요엘의 수첩 «만난 사람» — 0번 이야기에서만 열립니다 (js/joel.js)
+
+   아이가 적은 건 «누가 가지를 받았나» 가 아니라 «누가 나를 봤나» 입니다.
+   그래서 ③④⑥ 세 줄만 밝게 남깁니다(is-keep) — 나머지는 그냥 하루의 일입니다
+   ══════════════════════════════════════════ */
+.book__tab--met.is-off{display:none;}
+.met{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;}
+.met li{padding:6px 8px 7px;border-radius:3px;background:#141A17;border-left:2px solid #333D36;}
+.met li b{display:block;font-size:11px;font-weight:600;color:#6B756D;}
+.met li span{display:block;margin-top:3px;font-size:10.5px;line-height:1.5;color:#5F6B62;white-space:pre-line;}
+.met li.is-met{background:#171F1A;border-left-color:var(--data);}
+.met li.is-met b{color:var(--parch);}
+.met li.is-met span{color:#A8B2A8;}
+/* «나를 봤나» 에 답하는 세 줄 — 아이는 모르고 적었지만 이게 이 수첩의 본줄입니다 */
+.met li.is-keep{border-left-color:var(--gold);}
+.met li.is-keep span{color:var(--gold);}
+.met li.is-side{opacity:.72;}
+/* 새로 배운 말 — 뒷장 한 칸. 아이 글씨로, 어른의 해석을 붙이지 않습니다 */
+.met li.is-word{border-left-color:#B79A57;background:rgba(183,154,87,.08);}
+.met li.is-word b{color:var(--gold);font-family:var(--mono);letter-spacing:.06em;}
+.met li.is-word span{color:#D9CFB4;font-style:italic;}
+.met__none{font-size:11px;color:#6B756D;padding:8px 2px;}
+
+/* 인물 고르기 칸의 부제 — 요엘을 해 본 사람에게만 붙는 아이의 이름표.
+   화면이 «아홉 살짜리가 기억하는 어느 오후 한 장» 이 됩니다 */
+.cast__sub{display:block;margin-top:2px;font-size:8px;line-height:1.25;
+           color:var(--gold);opacity:.82;word-break:keep-all;}
+.cast__line.is-joel{color:var(--gold);font-style:italic;}
+
+/* 호산나 — 뜻을 배우기 전에는 화면에 없습니다. 배우는 것이 곧 조작 해금입니다 */
+.hud__b--shout{display:none;border-color:#8A7A45;background:rgba(52,44,22,.86);color:var(--gold);}
+.hud__b--shout.is-on{display:flex;animation:restIn .2s ease;}
+.hud__b--shout small{color:#B49A5E;}
+.hud__b--shout:hover{background:rgba(74,62,30,.94);border-color:var(--gold);}
+.hud__b--shout:active{background:rgba(96,80,38,.96);}
+
+/* 요엘의 엔딩 — 장부 대신 수첩 */
+.qcard--joel .qcard__box{border-color:#7E9BD8;
+                         box-shadow:0 0 0 1px rgba(126,155,216,.18), 0 12px 38px rgba(0,0,0,.66);}
+.qcard--joel .qcard__lab{color:#A9C2F0;}
+.qcard--joel .qcard__lab i{background:#A9C2F0;}
+.joel__say{margin-top:9px;display:flex;flex-direction:column;gap:5px;}
+.joel__say p{margin:0;font-size:12px;line-height:1.6;color:var(--parch);}
+.joel__say p b{display:inline-block;min-width:44px;margin-right:7px;
+               font-family:var(--mono);font-size:9.5px;color:var(--data-dim);}
+.joel__note{margin:10px 0 0;font-size:10.5px;line-height:1.6;color:#8A948B;}
+/* 여섯 칸은 안에서 굴리고, 그 아래 «호산나» 한 장은 늘 보이게 둡니다 —
+   한 장 더 넘기는 그 대목이 이 하루의 마지막 몫이라 접히면 안 됩니다 */
+.met--end{margin-top:9px;max-height:44vh;overflow-y:auto;padding-right:2px;}
+.joel__word{display:none;margin-top:9px;padding:7px 9px;border-radius:3px;
+            background:rgba(183,154,87,.09);border-left:2px solid var(--gold);}
+.joel__word.is-on{display:block;}
+.joel__word b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--gold);}
+.joel__word span{display:block;margin-top:3px;font-size:10.5px;line-height:1.6;color:#D9CFB4;font-style:italic;}
+
+/* 주고받는 대사 — 주인공이 말하는 줄은 이름표 색을 달리해 오가는 것이 보이게 */
+.talk.is-me{border-left-color:var(--gold);}
+.talk.is-me .talk__who{color:#E3C273;}
 
 /* ── 할 일 완료 → 다음 할 일 ── */
 .qcard{position:absolute;inset:9px;z-index:4;display:none;place-items:center;padding:12px;
@@ -686,6 +797,12 @@ body.play{padding:0;display:grid;place-items:center;background:#0B0F0C;
   .clock__ico{font-size:8px;}
   .clock__day{font-size:8.5px;}
   .clock__hour{font-size:9px;}
+  /* 시계가 올라온 만큼 지도도 따라 올린다 — 지도 그림은 줄이지 않습니다(줄이면 못 읽습니다) */
+  .mmap{right:15px;top:85px;width:132px;padding:5px 6px 6px;}
+  .mmap__where{font-size:9.5px;}
+  .mmap__go{font-size:9px;margin-top:4px;}
+  .mmap__act{font-size:8.5px;}
+  .mmap__leg{margin-top:5px;gap:3px 6px;}
   /* 화면이 작아지면 «할 일» 띠도 같이 줄인다 — 화면을 너무 덮지 않게 */
   .goal{left:15px;top:15px;max-width:min(58%,220px);padding:5px 8px 6px;}
   .goal__no{font-size:8.5px;}
