@@ -29,6 +29,7 @@
     [/^(cw|tr)_/,  '7_expansion'],
     [/^x\d\d_/,    '7_expansion'],
     [/^[bg]\d\d_/, '8_characters'],
+    [/^p\d_/,      '8_characters'],   // 주인공 전용 그림 (p0_joel …)
     [/^\d\d_/,     '1_buildings'],
   ];
   function pathOf(key) {
@@ -188,6 +189,16 @@
     "b22_joseph_arimathea": { name:"아리마대 요셉", cat:"성경 인물", note:"예수의 시신을 수습한 부유한 공회원" },
     "b23_simon_cyrene": { name:"구레네 시몬", cat:"성경 인물", note:"북아프리카 키레네 출신 디아스포라 유대인" },
     "b24_barabbas": { name:"바라바", cat:"성경 인물", note:"사면받은 죄수. 거친 자루옷" },
+
+    /* ── 주인공 전용 그림 (assets/images/8_characters/protagonists_meta.json) ──
+       고를 수 있는 주인공 표는 js/cast.js 입니다. 여섯 사람 가운데 넷만 전용 그림이 있고,
+       빌라도·베드로는 성경 인물 그림(b17·b05)을 그대로 빌려 씁니다.
+       cat 은 «주인공» 으로 따로 묶지 않고 그 사람의 계층을 그대로 답니다 —
+       이름표 색(main.js 의 TAG_COLOR)이 성 안의 다른 사람들과 같은 규칙으로 붙게 하려는 것입니다 */
+    "p0_joel": { name:"요엘", cat:"서민·노동", note:"주인공 0 · 아이. 채도 높은 적갈색 튜닉과 종려나무 가지" },
+    "p1_asaph": { name:"아사프", cat:"상업·시장", note:"주인공 1 · 성전 상인. 황토색 옷에 장부를 든 실루엣" },
+    "p2_nitssi": { name:"닛시", cat:"종교 계층", note:"주인공 2 · 성전 경비병. 로마군이 아닌 유대 경비대 — 몽둥이와 횃불" },
+    "p3_longinus": { name:"롱기누스", cat:"로마·통제", note:"주인공 3 · 로마 군인. 깃털 장식 없는 현장 병사, 창" },
   };
 
   for (const k in ATLAS) {

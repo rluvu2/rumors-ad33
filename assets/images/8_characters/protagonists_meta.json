@@ -1,0 +1,128 @@
+{
+  "tile_size": 32,
+  "note": "주인공 6인. 스프라이트는 NPC 56종과 같은 폴더에 들어 있습니다. 규격은 NPC와 동일(32x48px, 1x1칸 발판, 하단 중앙 정렬). 4·5번은 전용 파일 없이 기존 성경 인물 스프라이트를 참조합니다.",
+  "protagonists": [
+    {
+      "index": 0,
+      "key": "p0_joel",
+      "name_ko": "요엘",
+      "role": "아이",
+      "distance_to_jesus": "군중 속에서 1.5초 눈이 마주침",
+      "what_he_knows": "이름도 모른다",
+      "design_intent": "군중 사이에서 즉시 눈에 띄도록 채도 높은 적갈색 튜닉. 종려나무 가지를 들려 유월절 주간의 시점을 명시했습니다.",
+      "sprite_px": [
+        32,
+        48
+      ],
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "views": {
+        "front": "p0_joel.png",
+        "side": "p0_joel_side.png",
+        "back": "p0_joel_back.png"
+      }
+    },
+    {
+      "index": 1,
+      "key": "p1_asaph",
+      "name_ko": "아사프",
+      "role": "성전 상인",
+      "distance_to_jesus": "좌판 너머, 원한의 거리",
+      "what_he_knows": "이름과 원한",
+      "design_intent": "부유하지도 가난하지도 않은 중간 계층의 황토색 옷. 장부를 들려 검증·기록이라는 그의 직업 습관을 실루엣에 넣었습니다.",
+      "sprite_px": [
+        32,
+        48
+      ],
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "views": {
+        "front": "p1_asaph.png",
+        "side": "p1_asaph_side.png",
+        "back": "p1_asaph_back.png"
+      }
+    },
+    {
+      "index": 2,
+      "key": "p2_nitssi",
+      "name_ko": "닛시",
+      "role": "성전 경비병",
+      "distance_to_jesus": "체포하는 손 · 무덤을 지킴",
+      "what_he_knows": "죄수 번호로 안다",
+      "design_intent": "로마군이 아닌 유대 성전 경비대. 갑옷·투구 없이 어두운 튜닉과 가죽 허리띠, 몽둥이와 횃불 차림입니다.",
+      "sprite_px": [
+        32,
+        48
+      ],
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "views": {
+        "front": "p2_nitssi.png",
+        "side": "p2_nitssi_side.png",
+        "back": "p2_nitssi_back.png"
+      }
+    },
+    {
+      "index": 3,
+      "key": "p3_longinus",
+      "name_ko": "롱기누스",
+      "role": "로마 군인",
+      "distance_to_jesus": "몇 달째 미행 · 감시 보고서 작성",
+      "what_he_knows": "행적 전부. 의미는 모름",
+      "design_intent": "지휘관 깃털 장식을 뺀 현장 병사. 창을 들려 일반 군단병(검+방패)과 실루엣이 구분되게 했습니다.",
+      "sprite_px": [
+        32,
+        48
+      ],
+      "sprite_tiles": [
+        1,
+        1.5
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "views": {
+        "front": "p3_longinus.png",
+        "side": "p3_longinus_side.png",
+        "back": "p3_longinus_back.png"
+      }
+    },
+    {
+      "index": 4,
+      "name_ko": "빌라도",
+      "role": "로마 총독",
+      "distance_to_jesus": "마주 앉아 심문 · 판결",
+      "what_he_knows": "얼굴을 마주보고도 \"진리가 무엇이냐\"",
+      "reuses": "b17_pontius_pilate",
+      "note": "주인공용 별도 스프라이트 없음. 기존 성경 인물 파일을 그대로 사용."
+    },
+    {
+      "index": 5,
+      "name_ko": "베드로",
+      "role": "사도",
+      "distance_to_jesus": "3년 동행 · 그리고 부인",
+      "what_he_knows": "전부 알고도 모른다 한다",
+      "reuses": "b05_peter",
+      "note": "주인공용 별도 스프라이트 없음. 기존 성경 인물 파일을 그대로 사용."
+    }
+  ]
+}
