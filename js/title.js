@@ -15,8 +15,10 @@
   const NS = window.JR;
   const KEY = 'jr.options';
 
+  /* 기본 주인공은 인물 표(js/cast.js)의 첫 사람 */
+  const firstCast = (NS.Cast && NS.Cast.first()) || null;
   const DEFAULTS = { bgm: 45, sfx: 50, mute: false, names: false, spec: false, video: true,
-                     hero: 'g31_traveler' };
+                     hero: (firstCast && firstCast.sprite) || 'g31_traveler' };
   const opt = Object.assign({}, DEFAULTS, read());
 
   let hooks = {};                 // { onStart, onResume, apply }
@@ -28,7 +30,9 @@
   const items = [];               // 차림표 항목들
   let sel = 0;
 
-  const soundOn = () => unlocked && !opt.mute && opt.bgm > 0;
+  /* 음악은 «켜짐» 이 기본입니다. 여기서 보는 것은 설정이지 실제로 소리가 나고 있는지가 아닙니다 —
+     브라우저가 첫 자동 재생을 막을 수 있어서, 그때는 화면을 한 번 건드리면 되살아납니다 */
+  const soundOn = () => !opt.mute && opt.bgm > 0;
 
   /* 파일로 열면 저장이 막히는 브라우저가 있어 조용히 넘어간다 */
   function read() {
@@ -48,9 +52,12 @@
       sound: rd('btnVidSound'),
       pages: { main: rd('pageMain'), char: rd('pageChar'), option: rd('pageOption'),
                help: rd('pageHelp'), credit: rd('pageCredit') },
-      grid: rd('charGrid'), now: rd('charNow')
+      cast: rd('castList'), castName: rd('castName'), castRole: rd('castRole'),
+      castLine: rd('castLine'), castBrief: rd('castBrief'), castSpan: rd('castSpan'),
+      castGo: rd('btnCastGo')
     };
-    buildChars();
+    buildCast();
+    el.castGo.addEventListener('click', castGo);
 
     /* 차림표 — 누르거나, 방향키로 고르고 Enter */
     items.push(...document.querySelectorAll('#titleMenu .menu__item'));
@@ -63,9 +70,15 @@
     addEventListener('keydown', e => {
       if (!open) return;
       const k = e.code;
+      if (cur === 'char') {                       // 인물 고르기 — 좌우로 옮기고 Enter 로 시작
+        if (k === 'ArrowRight' || k === 'KeyD' || k === 'ArrowDown' || k === 'KeyS') { e.preventDefault(); moveCast(1); }
+        else if (k === 'ArrowLeft' || k === 'KeyA' || k === 'ArrowUp' || k === 'KeyW') { e.preventDefault(); moveCast(-1); }
+        else if (k === 'Enter' || k === 'Space') { e.preventDefault(); castGo(); }
+        return;                                   // Esc 는 main.js 가 맡는다 (첫 화면으로 되돌림)
+      }
       if (cur !== 'main') {                       // 하위 쪽에서는 Enter·Space 로도 되돌아간다
         if (k === 'Enter' || k === 'Space') { e.preventDefault(); page('main'); }
-        return;                                   // Esc 는 main.js 가 맡는다
+        return;
       }
       if (k === 'ArrowDown' || k === 'KeyS') { e.preventDefault(); move(1); }
       else if (k === 'ArrowUp' || k === 'KeyW') { e.preventDefault(); move(-1); }
@@ -80,20 +93,29 @@
       console.info('[title] 시작 영상을 불러오지 못했습니다: assets/videos/start.mp4');
     });
 
-    /* 소리 단추 — 꺼져 있으면 켜고, 켜져 있으면 끈다 */
+    /* 소리 단추 — 세 가지 경우를 가려 씁니다.
+         꺼 뒀다        → 켠다
+         켜 뒀는데 안 난다 → 브라우저가 막은 것이므로 되살린다 (여기서 끄면 두 번 눌러야 하니까)
+         나고 있다      → 끈다 */
     el.sound.addEventListener('click', () => {
-      if (soundOn()) opt.mute = true;
-      else {
+      if (!soundOn()) {
         opt.mute = false;
         if (!opt.bgm) opt.bgm = DEFAULTS.bgm;
         arm();
+      } else if (!NS.Audio.isOn()) {
+        arm(); NS.Audio.resume();
+      } else {
+        opt.mute = true;
       }
       save(); paintOptions(); apply(); paintSound();
     });
 
-    /* 브라우저는 사용자가 한 번 건드려야 소리를 내준다 */
+    /* 브라우저는 사용자가 한 번 건드려야 소리를 내준다.
+       아래 arm() 으로 미리 한 번 걸어 두지만 막힐 수 있으므로, 첫 손길에 다시 살린다 */
     const firstTouch = () => {
       arm();
+      NS.Audio.resume();
+      paintSound();
       removeEventListener('pointerdown', firstTouch);
       removeEventListener('keydown', firstTouch);
     };
@@ -108,10 +130,13 @@
     bindCheck('optVideo', 'video');
     rd('btnReset').addEventListener('click', () => {
       Object.assign(opt, DEFAULTS);
-      save(); paintOptions(); paintHero(); apply();
+      save(); paintOptions(); apply();
     });
 
     paintOptions(); paintSound(); apply();
+    // 음악은 켜진 채로 시작합니다 — 브라우저가 허락하면 바로 흐르고,
+    // 막으면 첫 손길(firstTouch)에 되살아납니다
+    arm();
     show('title');
   }
 
@@ -127,41 +152,75 @@
   }
 
   /* ══════════════════════════════════════════
-     주인공 고르기 — assets 의 인물 표를 그대로 늘어놓는다
+     인물 고르기 — START 를 누르면 나온다. 표는 js/cast.js
      ══════════════════════════════════════════ */
-  function buildChars() {
-    const A = NS.Assets;
-    if (!el.grid || !A) return;
-    if (!A.CHARS[opt.hero]) opt.hero = DEFAULTS.hero;      // 없는 키가 저장돼 있으면 되돌린다
-    for (const key in A.CHARS) {
+  const cast = () => (NS.Cast ? NS.Cast.all() : []);
+  let castSel = 0;
+
+  function buildCast() {
+    const A = NS.Assets, list = cast();
+    if (!el.cast || !list.length) return;
+    list.forEach((c, i) => {
       const b = document.createElement('button');
-      b.className = 'pick__b'; b.dataset.key = key;
-      b.title = A.CHARS[key].name;
-      const img = document.createElement('img');
-      img.src = A.pathOf(key); img.alt = A.CHARS[key].name; img.loading = 'lazy';
-      b.appendChild(img);
-      b.addEventListener('click', () => pickHero(key));
-      el.grid.appendChild(b);
-    }
-    paintHero();
+      b.type = 'button';
+      b.className = 'cast__b' + (c.ready ? '' : ' is-locked');
+      b.dataset.i = i;
+      b.title = c.ready ? c.name : '준비 중';
+
+      if (c.ready && c.sprite && A) {
+        const img = document.createElement('img');
+        img.src = A.pathOf(c.sprite); img.alt = c.name; img.loading = 'lazy'; img.draggable = false;
+        b.appendChild(img);
+      } else {
+        const q = document.createElement('span');
+        q.className = 'cast__face'; q.textContent = '?';
+        b.appendChild(q);
+      }
+      const nm = document.createElement('span');
+      nm.className = 'cast__nm'; nm.textContent = c.ready ? c.role : '???';
+      b.appendChild(nm);
+
+      // 고른 칸을 한 번 더 누르면 바로 시작합니다
+      b.addEventListener('click', () => { if (castSel === i && c.ready) castGo(); else pickCast(i); });
+      el.cast.appendChild(b);
+    });
+    const on = list.findIndex(c => c.ready);
+    castSel = on < 0 ? 0 : on;
+    paintCast();
   }
 
-  function pickHero(key) {
-    opt.hero = key;
-    save(); paintHero(); apply();
+  function pickCast(i) {
+    castSel = i;
+    paintCast();
+  }
+  function moveCast(d) {
+    const n = cast().length;
+    if (!n) return;
+    pickCast((castSel + d + n) % n);
   }
 
-  function paintHero() {
-    const A = NS.Assets;
-    if (!el.grid || !A) return;
-    for (const b of el.grid.children) b.classList.toggle('is-on', b.dataset.key === opt.hero);
-    const m = A.CHARS[opt.hero];
-    el.now.textContent = m ? m.name : '—';
-    if (m) {
-      const s = document.createElement('small');
-      s.textContent = m.cat;
-      el.now.appendChild(s);
-    }
+  function paintCast() {
+    const c = cast()[castSel];
+    if (!el.cast || !c) return;
+    for (const b of el.cast.children) b.classList.toggle('is-on', +b.dataset.i === castSel);
+    el.castName.firstChild.nodeValue = c.ready ? c.name : '???';
+    el.castRole.textContent = c.ready ? `${c.role} · ${c.age}세 · ${c.tag}` : `${c.tag}`;
+    el.castLine.textContent = c.line || '';
+    el.castBrief.textContent = c.brief || '';
+    el.castSpan.textContent = c.span || '';
+    el.castGo.disabled = !c.ready;
+    el.castGo.textContent = c.ready ? '이 사람으로 시작' : '준비 중';
+    const b = el.cast.children[castSel];
+    if (b && b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+
+  /* 고른 사람으로 게임을 연다 */
+  function castGo() {
+    const c = cast()[castSel];
+    if (!ready || !c || !c.ready) return;
+    if (c.sprite) { opt.hero = c.sprite; save(); apply(); }
+    hide();
+    hooks.onStart && hooks.onStart(c);
   }
 
   function paintOptions() {
@@ -218,9 +277,9 @@
   function activate(act) {
     if (act !== 'start') { if (act) page(act); return; }
     if (!ready) return;
-    hide();
-    if (mode === 'pause') hooks.onResume && hooks.onResume();
-    else hooks.onStart && hooks.onStart();
+    if (mode === 'pause') { hide(); hooks.onResume && hooks.onResume(); return; }
+    page('char');            // 시작 = 곧바로 게임이 아니라 «누구의 눈으로 볼 것인가»
+    paintCast();
   }
 
   /* ══════════════════════════════════════════
@@ -234,7 +293,7 @@
     sel = 0; paintSel();
     el.tag.textContent = mode === 'pause'
       ? '잠시 멈췄습니다. 성 안은 그대로 있습니다.'
-      : '유월절 엿새 전, 성 안에는 소문이 돈다.';
+      : '유월절 D-8, 성 안에는 소문이 돈다.';
     el.hint.textContent = mode === 'pause' ? 'PRESS ESC TO RESUME' : 'PRESS START';
     if (mode === 'pause') { el.start.disabled = false; el.start.textContent = 'RESUME'; }
     else {

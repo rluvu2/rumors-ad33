@@ -6,6 +6,8 @@
      dpal/deco  : 벽·축대 같은 붙박이 조각. [칸x, 칸y, 팔레트번호, 막힘여부]
      objs       : 건물·소품. {a:그림키, c:칸x, r:칸y, talk:[대사], to/at/dir:출입구}
      npcs       : 인물. char 는 assets 의 인물 그림, sprite 는 짐승 그림
+                  only:"day" 는 해가 지면 들어가고, only:"night" 는 해가 진 뒤에만 나옵니다
+                  (없으면 하루 종일 서 있습니다 — 성문 경비·짐꾼처럼)
      portals    : 밟으면 넘어가는 칸. {c, r, to, at:[칸x,칸y], dir}
 
    장소를 하나 더 만들려면 MAPS 에 같은 모양으로 한 덩이 더 붙이면 됩니다.
@@ -124,14 +126,20 @@
       ],
 
       npcs: [
-        { id:"woman", name:"물 긷는 여인", char:"g02_housewife", at:[12, 12], mode:"wander", dir:"down", radius:4, speed:24, rumors:["r08", "r04"],
+        { id:"woman", name:"물 긷는 여인", char:"g02_housewife", at:[12, 12], mode:"wander", dir:"down", radius:4, speed:24, rumors:["r08", "r04"], only:"day",
           lines:[
             "우물은 성문 밖 올리브 뜰에 있어요.",
             "해 뜨기 전에 다녀와야 덜 붐빕니다.",
           ] },
-        { id:"boy", name:"골목 아이", char:"g08_boy", at:[20, 12], mode:"wander", dir:"down", radius:5, speed:40, rumors:["r04"],
+        { id:"boy", name:"골목 아이", char:"g08_boy", at:[20, 12], mode:"wander", dir:"down", radius:5, speed:40, rumors:["r04"], only:"day",
           lines:[
             "동쪽으로 가면 빵 굽는 냄새가 나!",
+          ] },
+        /* 밤에만 — 아이가 들어간 자리에 순찰이 선다 (소문 r04 «밤 순찰이 두 배») */
+        { id:"patrol", name:"야경 순찰", char:"g22_legionary", at:[20, 12], mode:"patrol", dir:"down", speed:30, path:[[20, 12], [20, 19], [12, 19], [12, 12]], rumors:["r04", "r11"], only:"night",
+          lines:[
+            "등 없이 다니지 마라. 밤에는 다 수상하다.",
+            "명절엔 늘 이렇다. 우리도 자고 싶다.",
           ] },
         { id:"elder", name:"노인", char:"g05_old_man", at:[5, 7], mode:"idle", dir:"right", speed:24, rumors:["r02"],
           lines:[
@@ -235,12 +243,18 @@
       ],
 
       npcs: [
-        { id:"merchant", name:"천 장수", char:"g12_cloth_merchant", at:[8, 14], mode:"wander", dir:"down", radius:2, speed:18, rumors:["r09", "r01"],
+        { id:"merchant", name:"천 장수", char:"g12_cloth_merchant", at:[8, 14], mode:"wander", dir:"down", radius:2, speed:18, rumors:["r09", "r01"], only:"day",
           lines:[
             "두로에서 온 아마포입니다. 만져 보세요.",
             "값은… 오늘은 좀 깎아 드리죠.",
           ] },
-        { id:"changer", name:"환전상", char:"g13_money_changer", at:[17, 10], mode:"idle", dir:"down", speed:24, rumors:["r10"],
+        /* 밤에만 — 좌판이 걷힌 자리를 쓸어 담는다. 하루 값이 어땠는지는 이 사람이 안다 */
+        { id:"sweeper", name:"파장 청소꾼", char:"g01_laborer", at:[8, 14], mode:"wander", dir:"down", radius:2, speed:20, rumors:["r09", "r03"], only:"night",
+          lines:[
+            "좌판이 다 걷혔습니다. 오늘은 일찍들 접었어요.",
+            "쓸어 담은 지푸라기만 봐도 오늘 뭐가 팔렸는지 압니다.",
+          ] },
+        { id:"changer", name:"환전상", char:"g13_money_changer", at:[17, 10], mode:"idle", dir:"down", speed:24, rumors:["r10"], only:"day",
           lines:[
             "성전에 바칠 돈은 여기서 바꾸셔야 합니다.",
           ] },
@@ -248,19 +262,19 @@
           lines:[
             "지나가라. 여기 서 있지 말고.",
           ] },
-        { id:"kid2", name:"심부름꾼", char:"g09_girl", at:[15, 20], mode:"wander", dir:"down", radius:6, speed:42, rumors:["r07", "r04"],
+        { id:"kid2", name:"심부름꾼", char:"g09_girl", at:[15, 20], mode:"wander", dir:"down", radius:6, speed:42, rumors:["r07", "r04"], only:"day",
           lines:[
             "빵집 심부름 가는 길이에요!",
           ] },
-        { id:"crier", name:"호객꾼", char:"g11_spice_merchant", at:[6, 10], mode:"wander", dir:"down", radius:3, speed:20, rumors:["r03", "r09"],
+        { id:"crier", name:"호객꾼", char:"g11_spice_merchant", at:[6, 10], mode:"wander", dir:"down", radius:3, speed:20, rumors:["r03", "r09"], only:"day",
           lines:[
             "오늘 들어온 물건입니다, 보고 가세요!",
           ] },
-        { id:"donkey", name:"당나귀", sprite:"x15_donkey", at:[21, 20], mode:"wander", dir:"down", radius:3, speed:16,
+        { id:"donkey", name:"당나귀", sprite:"x15_donkey", at:[21, 20], mode:"wander", dir:"down", radius:3, speed:16, only:"day",
           lines:[
             "히힝—",
           ] },
-        { id:"sheep1", name:"양", sprite:"x16_sheep", at:[2, 18], mode:"wander", dir:"down", radius:3, speed:18,
+        { id:"sheep1", name:"양", sprite:"x16_sheep", at:[2, 18], mode:"wander", dir:"down", radius:3, speed:18, only:"day",
           lines:[
             "음메—",
           ] },
@@ -320,7 +334,8 @@
         { a:"x14_scroll_shelf", c:10, r:16 },
         { a:"x08_oil_lamp_stand", c:12, r:7 },
         { a:"x08_oil_lamp_stand", c:17, r:7 },
-        { a:"x11_dove_cage", c:18, r:16, talk:["제물로 바칠 비둘기다."] },
+        // game 을 적어 두면 그 앞에서 SPACE 를 눌렀을 때 작은 판(js/mini.js)이 열립니다
+        { a:"x11_dove_cage", c:18, r:16, talk:["제물로 바칠 비둘기다."], game:"blemish" },
         { a:"x11_dove_cage", c:19, r:16 },
         { a:"x10_money_table", c:15, r:16, talk:["성전세를 바꾸는 탁자다."] },
         { a:"x06_water_jar", c:26, r:8 },
@@ -331,18 +346,24 @@
       ],
 
       npcs: [
-        { id:"scribe", name:"서기관", char:"g18_scribe", at:[12, 15], mode:"idle", dir:"up", speed:24, rumors:["r06", "r03"],
+        { id:"scribe", name:"서기관", char:"g18_scribe", at:[12, 15], mode:"idle", dir:"up", speed:24, rumors:["r06", "r03"], only:"day",
           lines:[
             "두루마리를 함부로 만지지 마시오.",
             "오늘은 순례자가 유독 많군.",
           ] },
-        { id:"pilgrim1", name:"순례자", char:"g29_pilgrim_father", at:[14, 13], mode:"wander", dir:"down", radius:4, speed:22, rumors:["r03"],
+        { id:"pilgrim1", name:"순례자", char:"g29_pilgrim_father", at:[14, 13], mode:"wander", dir:"down", radius:4, speed:22, rumors:["r03"], only:"day",
           lines:[
             "갈릴리에서 사흘을 걸어왔습니다.",
           ] },
-        { id:"pilgrim2", name:"순례자", char:"g30_pilgrim_mother", at:[20, 9], mode:"wander", dir:"down", radius:5, speed:26, rumors:["r05"],
+        { id:"pilgrim2", name:"순례자", char:"g30_pilgrim_mother", at:[20, 9], mode:"wander", dir:"down", radius:5, speed:26, rumors:["r05"], only:"day",
           lines:[
             "이런 뜰은 처음 봅니다.",
+          ] },
+        /* 밤에만 — 뜰 문을 닫고 등을 켜는 당번. 낮 순례자가 섰던 자리에 선다 */
+        { id:"lamplit", name:"밤 당번 레위인", char:"g20_levite", at:[14, 13], mode:"idle", dir:"down", speed:20, rumors:["r06", "r05"], only:"night",
+          lines:[
+            "뜰은 닫았습니다. 등만 켜 두는 중입니다.",
+            "낮에 탁자가 엎어진 자리, 아직 저 모양이오.",
           ] },
         { id:"guard2", name:"성전 경비", char:"g20_levite", at:[8, 9], mode:"patrol", dir:"down", speed:24, path:[[8, 9], [19, 9], [19, 15], [8, 15]], rumors:["r06"],
           lines:[
@@ -556,10 +577,16 @@
       ],
 
       npcs: [
-        { id:"farmer", name:"올리브 농부", char:"g01_laborer", at:[23, 16], mode:"wander", dir:"down", radius:3, speed:20, rumors:["r05", "r12"],
+        { id:"farmer", name:"올리브 농부", char:"g01_laborer", at:[23, 16], mode:"wander", dir:"down", radius:3, speed:20, rumors:["r05", "r12"], only:"day",
           lines:[
             "압착기는 수확철에만 돌립니다.",
             "올해는 비가 적어 열매가 작아요.",
+          ] },
+        /* 밤에만 — 골짜기 건너에서 밤을 새우는 무리. 농부가 들어간 자리에 선다 */
+        { id:"torch", name:"횃불 든 사내", char:"g32_diaspora_pilgrim", at:[23, 16], mode:"idle", dir:"down", speed:20, rumors:["r12", "r05"], only:"night",
+          lines:[
+            "불을 좀 멀리 두시오. 여기서는 눈이 밝으면 손해요.",
+            "밤마다 사람이 늘어요. 성 안에서는 못 하는 말들을 여기서 합니다.",
           ] },
         { id:"shepherd", name:"목자", char:"g04_shepherd", at:[6, 22], mode:"patrol", dir:"down", speed:22, path:[[6, 22], [8, 22], [8, 16], [6, 16]], rumors:["r12"],
           lines:[
@@ -581,7 +608,7 @@
           lines:[
             "메에—",
           ] },
-        { id:"woman2", name:"물 긷는 여인", char:"g02_housewife", at:[11, 10], mode:"wander", dir:"down", radius:3, speed:18, rumors:["r05"],
+        { id:"woman2", name:"물 긷는 여인", char:"g02_housewife", at:[11, 10], mode:"wander", dir:"down", radius:3, speed:18, rumors:["r05"], only:"day",
           lines:[
             "이 우물 물이 제일 답니다.",
           ] },

@@ -7,7 +7,7 @@
      bgm_title.mp3   시작 화면 (지금 들어 있는 곡)
      bgm_alley.mp3   bgm_market.mp3  bgm_temple.mp3
      bgm_gate.mp3    bgm_grove.mp3   bgm_roof.mp3
-     sfx_step.wav    sfx_talk.wav    sfx_door.wav
+     sfx_step.wav    sfx_talk.wav    sfx_door.wav    sfx_quest.wav
 
    장소가 바뀌면 곡은 곧바로 멈추고, 그 장소의 파일이 있으면 새로 겁니다.
    (파일이 아직 없는 장소는 조용해집니다)
@@ -29,7 +29,8 @@
     grove:  'bgm_grove.mp3',
     roof:   'bgm_roof.mp3'
   };
-  const SFX = { step: 'sfx_step.wav', talk: 'sfx_talk.wav', door: 'sfx_door.wav' };
+  const SFX = { step: 'sfx_step.wav', talk: 'sfx_talk.wav', door: 'sfx_door.wav',
+                quest: 'sfx_quest.wav' };     // 할 일 하나를 끝냈을 때
 
   const cache = {};                 // 파일 이름 -> Audio (없으면 null)
   let unlocked = false;             // 브라우저는 사용자가 한 번 건드려야 소리를 낸다
@@ -111,6 +112,15 @@
 
   function stopBgm() { silence(); currentKey = null; }
 
+  /* 곡이 걸려 있는데 실제로는 안 나고 있으면 다시 건다.
+     브라우저가 첫 자동 재생을 막았을 때, 사용자가 화면을 처음 건드리는 순간
+     이걸로 되살립니다 (unlock 은 한 번 부르고 나면 다시 걸어 주지 않으므로 따로 둡니다) */
+  function resume() {
+    if (!audible() || !vol.bgm || !currentKey) return;
+    if (current || pending) return;                      // 이미 나고 있거나 우는 중
+    playBgm(currentKey, true);
+  }
+
   /* gain 은 소리마다의 세기(0~1). 옵션의 효과음 볼륨이 여기에 곱해진다 */
   function play(name, gain) {
     if (!audible() || !vol.sfx) return;
@@ -131,6 +141,6 @@
     if (stepT >= (running ? 0.24 : 0.36)) { stepT = 0; play('step', 0.7); }
   }
 
-  NS.Audio = { unlock, playBgm, stopBgm, play, step, setVolume, setMuted, toggleMute, isOn,
+  NS.Audio = { unlock, resume, playBgm, stopBgm, play, step, setVolume, setMuted, toggleMute, isOn,
                BGM, SFX, vol, nowPlaying: () => currentKey };
 })();

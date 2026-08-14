@@ -52,6 +52,8 @@
     state.learnAt = learnId ? lines.length - 1 : -1;
     render();
     el.box.classList.add('is-open');
+    // 말을 거는 동안에는 발이 묶이므로, 터치 기기에서는 십자키를 감춥니다 (style.css 의 body.is-talk)
+    document.body.classList.add('is-talk');
   }
 
   function render() {
@@ -77,6 +79,7 @@
     state.open = false; state.target = null; state.door = null;
     state.learnAt = -1; state.learnId = null;
     el.box.classList.remove('is-open', 'is-rumor');
+    document.body.classList.remove('is-talk');
   }
 
   /* ══════════════════════════════════════════
@@ -141,8 +144,11 @@
   /* 아직 못 들은 소문을 쥐고 있는 사람인가 — 머리 위 «!» 표시에 씁니다 */
   const hasNews = npc => !!npc.rumors && npc.rumors.some(id => RUMORS[id] && !has(id));
 
+  /* 개발용 — debug.html 의 «소문 전부» 단추. 열두 자락을 한꺼번에 들은 것으로 칩니다 */
+  const learnAll = () => { for (const id in RUMORS) learn(id); };
+
   NS.Dialogue = {
-    RUMORS, learned, init, open, advance, close, talkTo, lookAt, learn, hasNews,
+    RUMORS, learned, init, open, advance, close, talkTo, lookAt, learn, learnAll, hasNews,
     isOpen: () => state.open,
     count: () => learned.length,
     total: TOTAL

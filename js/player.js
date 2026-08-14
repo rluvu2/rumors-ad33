@@ -32,8 +32,9 @@
     const x = d.at[0] * TILE + (TILE - w) / 2;
     const y = d.at[1] * TILE + TILE - h - 6;
     return {
-      key: mapKey + ':' + d.id, name: d.name, lines: d.lines,
+      key: mapKey + ':' + d.id, id: d.id, map: mapKey, name: d.name, lines: d.lines,
       rumors: d.rumors || [],
+      only: d.only || null, off: false,        // only:"day"|"night" — 낮에만·밤에만 나오는 사람
       mode: d.mode || 'wander', char: d.char || null, sprite: d.sprite || null,
       x, y, w, h, drawH: sp ? sp.h : 48,
       homeX: x, homeY: y, radius: (d.radius || 3) * TILE, speed: d.speed || 24,
