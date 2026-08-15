@@ -38,7 +38,8 @@ rumors-ad33/
 └── assets/
     ├── images/       그림 (1_buildings ~ 8_characters)
     ├── audio/        소리 — 넣는 방법은 assets/audio/README.md
-    └── videos/       start.mp4 — 시작 화면 배경
+    ├── videos/       start.mp4 — 시작 화면 배경
+    └── share/        og-cover.jpg — 주소를 공유했을 때 뜨는 썸네일 (1200×630)
 ```
 
 스크립트는 `assets → map → player → dialogue → audio → cast → clock → mini → quest → title → main`
